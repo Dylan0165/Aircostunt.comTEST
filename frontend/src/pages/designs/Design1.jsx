@@ -1,30 +1,46 @@
-import { Link } from 'react-router-dom'
+import { Routes, Route, Link } from 'react-router-dom'
 import Header from '../../components/Header'
-import Home from '../Home'
 import Footer from '../../components/Footer'
 import CookieBanner from '../../components/CookieBanner'
+import Home from '../Home'
+import Merken from '../Merken'
+import Producten from '../Producten'
+import OverOns from '../OverOns'
+import ContactPage from '../ContactPage'
+
+const BASE = '/design/1'
+
+function Layout({ children }) {
+  return (
+    <div className="font-sans min-h-screen">
+      <Header base={BASE} />
+      <main>{children}</main>
+      <Footer base={BASE} />
+      <CookieBanner />
+    </div>
+  )
+}
 
 export default function Design1() {
   return (
-    <div className="font-sans min-h-screen">
-      <Header />
-      <main>
-        <Home />
-      </main>
-      <Footer />
-      <CookieBanner />
+    <>
+      <Routes>
+        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="merken" element={<Layout><Merken /></Layout>} />
+        <Route path="producten" element={<Layout><Producten /></Layout>} />
+        <Route path="over-ons" element={<Layout><OverOns /></Layout>} />
+        <Route path="contact" element={<Layout><ContactPage /></Layout>} />
+      </Routes>
 
-      {/* Back button */}
       <Link
         to="/"
         style={{
-          position: 'fixed', bottom: 28, right: 28, zIndex: 9999,
+          position: 'fixed', bottom: 24, right: 24, zIndex: 9999,
           display: 'flex', alignItems: 'center', gap: 8,
           background: '#003366', color: '#fff',
-          padding: '11px 20px', borderRadius: 9999, textDecoration: 'none',
-          fontSize: 13, fontWeight: 700, boxShadow: '0 6px 24px rgba(0,0,0,0.35)',
+          padding: '10px 18px', borderRadius: 9999, textDecoration: 'none',
+          fontSize: 13, fontWeight: 700, boxShadow: '0 6px 20px rgba(0,0,0,0.35)',
           border: '1px solid rgba(255,255,255,0.15)',
-          transition: 'all 0.2s',
         }}
         onMouseEnter={e => { e.currentTarget.style.background = '#FF6600' }}
         onMouseLeave={e => { e.currentTarget.style.background = '#003366' }}
@@ -34,6 +50,6 @@ export default function Design1() {
         </svg>
         Alle ontwerpen
       </Link>
-    </div>
+    </>
   )
 }

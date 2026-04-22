@@ -3,18 +3,18 @@ import { Link } from 'react-router-dom'
 import PrivacyModal from './PrivacyModal'
 import { SITE } from '../data/staticData'
 
-const NAV_LINKS = [
-  { label: 'Home', to: '/', type: 'route' },
-  { label: 'Merken', to: '/merken', type: 'route' },
-  { label: 'Producten', to: '/producten', type: 'route' },
-  { label: 'Galerij', to: '/galerij', type: 'route' },
-  { label: 'Over ons', to: '/over-ons', type: 'route' },
-  { label: 'Contact', to: '/contact', type: 'route' },
+const getNavLinks = (base) => [
+  { label: 'Home', to: `${base}/`, type: 'route' },
+  { label: 'Merken', to: `${base}/merken`, type: 'route' },
+  { label: 'Producten', to: `${base}/producten`, type: 'route' },
+  { label: 'Over ons', to: `${base}/over-ons`, type: 'route' },
+  { label: 'Contact', to: `${base}/contact`, type: 'route' },
 ]
 
 const BRAND_NAMES = ['Daikin', 'Mitsubishi Heavy', 'Mitsubishi Electric', 'Samsung', 'LG']
 
-export default function Footer() {
+export default function Footer({ base = '/design/1' }) {
+  const NAV_LINKS = getNavLinks(base)
   const [privacyOpen, setPrivacyOpen] = useState(false)
   const { name: siteName, phone, email } = SITE
   const year = new Date().getFullYear()
