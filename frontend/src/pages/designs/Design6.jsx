@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
 import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE } from '../../data/staticData'
+import WhatsAppButton from '../../components/WhatsAppButton'
 
 const BASE = '/design/6'
 
@@ -178,6 +179,17 @@ textarea.d6-form-control { resize: vertical; min-height: 100px; }
   .d6-cta-section { padding: 64px 24px; }
   .d6-page-hero { padding: 108px 24px 48px; }
 }
+@keyframes d6-fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes d6-fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.d6-hero-text > * { animation: d6-fadeUp 0.65s ease both; }
+.d6-hero-text > *:nth-child(2) { animation-delay: 0.12s; }
+.d6-hero-text > *:nth-child(3) { animation-delay: 0.24s; }
+.d6-hero-text > *:nth-child(4) { animation-delay: 0.36s; }
+.d6-hero-visual { animation: d6-fadeIn 0.9s ease both; animation-delay: 0.2s; }
+.d6-prod-card { transition: transform 0.25s, box-shadow 0.25s; }
+.d6-prod-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(255,107,44,0.15); }
+.d6-brand-pill { transition: transform 0.2s, background 0.2s; }
+.d6-brand-pill:hover { transform: scale(1.04); }
 `
 
 function D6Header() {
@@ -593,6 +605,7 @@ export default function Design6() {
         <Route path="over-ons" element={<Layout><D6OverOnsPage /></Layout>} />
         <Route path="contact" element={<Layout><D6ContactPage /></Layout>} />
       </Routes>
+      <WhatsAppButton />
       <Link
         to="/"
         style={{

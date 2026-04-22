@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
 import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE } from '../../data/staticData'
+import WhatsAppButton from '../../components/WhatsAppButton'
 
 const BASE = '/design/7'
 
@@ -198,6 +199,17 @@ textarea.d7-form-control { resize: vertical; min-height: 100px; }
   .d7-cta-strip { padding: 48px 24px; }
   .d7-page-hero { padding: 108px 24px 56px; }
 }
+@keyframes d7-fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes d7-fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.d7-hero-eyebrow { animation: d7-fadeUp 0.5s ease both; }
+.d7-hero-left h1 { animation: d7-fadeUp 0.65s ease both; animation-delay: 0.1s; }
+.d7-hero-left > p { animation: d7-fadeUp 0.65s ease both; animation-delay: 0.22s; }
+.d7-hero-left > div { animation: d7-fadeUp 0.65s ease both; animation-delay: 0.34s; }
+.d7-hero-trust { animation: d7-fadeIn 0.8s ease both; animation-delay: 0.45s; }
+.d7-prod-card { transition: transform 0.25s, box-shadow 0.25s; }
+.d7-prod-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(0,100,200,0.12); }
+.d7-brand-logo-box { transition: transform 0.2s, box-shadow 0.2s; }
+.d7-brand-logo-box:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
 `
 
 function D7Header() {
@@ -647,6 +659,7 @@ export default function Design7() {
         <Route path="over-ons" element={<Layout><D7OverOnsPage /></Layout>} />
         <Route path="contact" element={<Layout><D7ContactPage /></Layout>} />
       </Routes>
+      <WhatsAppButton />
       <Link
         to="/"
         style={{

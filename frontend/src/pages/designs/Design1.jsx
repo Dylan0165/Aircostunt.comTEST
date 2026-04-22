@@ -2,6 +2,7 @@ import { Routes, Route, Link } from 'react-router-dom'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import CookieBanner from '../../components/CookieBanner'
+import WhatsAppButton from '../../components/WhatsAppButton'
 import Home from '../Home'
 import Merken from '../Merken'
 import Producten from '../Producten'
@@ -32,6 +33,7 @@ export default function Design1() {
         <Route path="contact" element={<Layout><ContactPage /></Layout>} />
       </Routes>
 
+      <WhatsAppButton />
       <Link
         to="/"
         style={{

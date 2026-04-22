@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
 import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE } from '../../data/staticData'
+import WhatsAppButton from '../../components/WhatsAppButton'
 
 const BASE = '/design/5'
 
@@ -202,6 +203,17 @@ textarea.d5-form-control { resize: vertical; min-height: 100px; }
   .d5-cta-section { padding: 64px 24px; }
   .d5-page-hero { padding: 108px 24px 56px; }
 }
+@keyframes d5-fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes d5-fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.d5-hero-tag { animation: d5-fadeUp 0.5s ease both; }
+.d5-hero-left h1 { animation: d5-fadeUp 0.6s ease both; animation-delay: 0.1s; }
+.d5-hero-left > p { animation: d5-fadeUp 0.6s ease both; animation-delay: 0.22s; }
+.d5-hero-left > div:last-child { animation: d5-fadeUp 0.6s ease both; animation-delay: 0.34s; }
+.d5-hero-stats { animation: d5-fadeIn 0.8s ease both; animation-delay: 0.5s; }
+.d5-prod-card { transition: transform 0.25s, box-shadow 0.25s; }
+.d5-prod-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,51,102,0.15); }
+.d5-brand-card { transition: transform 0.2s, box-shadow 0.2s; }
+.d5-brand-card:hover { transform: translateY(-3px); }
 `
 
 function D5Header() {
@@ -664,6 +676,7 @@ export default function Design5() {
         <Route path="over-ons" element={<Layout><D5OverOnsPage /></Layout>} />
         <Route path="contact" element={<Layout><D5ContactPage /></Layout>} />
       </Routes>
+      <WhatsAppButton />
       <Link
         to="/"
         style={{

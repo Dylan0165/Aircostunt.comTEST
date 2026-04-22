@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
 import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE } from '../../data/staticData'
+import WhatsAppButton from '../../components/WhatsAppButton'
 
 const BASE = '/design/4'
 
@@ -173,6 +174,18 @@ textarea.d4-form-control { resize: vertical; min-height: 100px; }
   .d4-page-hero { padding: 100px 24px 48px; }
   .d4-cta-section { padding: 72px 24px; }
 }
+@keyframes d4-fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes d4-fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes d4-slideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+.d4-hero-eyebrow { animation: d4-slideRight 0.6s ease both; }
+.d4-hero h1 { animation: d4-fadeUp 0.7s ease both; animation-delay: 0.1s; }
+.d4-hero-sub { animation: d4-fadeUp 0.7s ease both; animation-delay: 0.22s; }
+.d4-hero-actions { animation: d4-fadeUp 0.7s ease both; animation-delay: 0.34s; }
+.d4-hero-stats { animation: d4-fadeIn 0.9s ease both; animation-delay: 0.5s; }
+.d4-product-card { transition: transform 0.25s, box-shadow 0.25s; }
+.d4-product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,200,255,0.12); }
+.d4-brand-card-pg { transition: transform 0.2s; }
+.d4-brand-card-pg:hover { transform: translateY(-2px); }
 `
 
 function D4Header() {
@@ -568,6 +581,7 @@ export default function Design4() {
         <Route path="over-ons" element={<Layout><D4OverOnsPage /></Layout>} />
         <Route path="contact" element={<Layout><D4ContactPage /></Layout>} />
       </Routes>
+      <WhatsAppButton />
       <Link
         to="/"
         style={{

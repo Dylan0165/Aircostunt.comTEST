@@ -1,9 +1,9 @@
 import { Routes, Route, Link, NavLink } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE } from '../../data/staticData'
+import WhatsAppButton from '../../components/WhatsAppButton'
 
 const BASE = '/design/2'
-const DAIKIN_IMG = 'https://www.aircostunt.com/wp-content/uploads/2020/11/Daikin-Sensira-FTXF35B-10.jpg'
 
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Sans+3:wght@300;400;600&display=swap');
@@ -112,6 +112,18 @@ const CSS = `
   .d2-footer-grid{grid-template-columns:1fr 1fr}
   .d2-footer{padding:40px 24px}
 }
+@keyframes d2-fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes d2-fadeIn{from{opacity:0}to{opacity:1}}
+.d2-hero-left > *{animation:d2-fadeUp 0.7s ease both}
+.d2-hero-left > *:nth-child(2){animation-delay:0.1s}
+.d2-hero-left > *:nth-child(3){animation-delay:0.2s}
+.d2-hero-left > *:nth-child(4){animation-delay:0.32s}
+.d2-hero-right{animation:d2-fadeIn 0.9s ease both;animation-delay:0.15s}
+.d2-hero-badge{animation:d2-fadeUp 0.6s ease both;animation-delay:0.4s}
+.d2-prod-card{transition:transform 0.25s,box-shadow 0.25s}
+.d2-prod-card:hover{transform:translateY(-4px)}
+.d2-brand-card{transition:transform 0.2s,box-shadow 0.2s}
+.d2-brand-card:hover{transform:translateY(-3px)}
 `
 
 function D2Header() {
@@ -222,7 +234,7 @@ function D2HomePage() {
             <strong>€479</strong>
             <span>split-unit set</span>
           </div>
-          <img className="d2-hero-img" src={DAIKIN_IMG} alt="Daikin airco" onError={e => { e.target.style.display = 'none' }} />
+          <img className="d2-hero-img" src="/aircos/daikin-ftxf35.png" alt="Daikin airco" onError={e => { e.target.style.display = 'none' }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 55%)' }} />
           <div className="d2-hero-bottom">
             <div className="d2-serif" style={{ fontSize: 13, opacity: 0.7, fontStyle: 'italic', marginBottom: 4 }}>"Gratis WiFi-module bij Daikin airco's"</div>
@@ -544,6 +556,7 @@ export default function Design2() {
         <Route path="over-ons" element={<Layout><D2OverOnsPage /></Layout>} />
         <Route path="contact" element={<Layout><D2ContactPage /></Layout>} />
       </Routes>
+      <WhatsAppButton />
       <Link to="/" style={{ position: 'fixed', bottom: 24, right: 24, zIndex: 9999, display: 'flex', alignItems: 'center', gap: 8, background: '#1a1208', color: '#fff', padding: '10px 18px', borderRadius: 0, textDecoration: 'none', fontSize: 13, fontWeight: 700, boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
         <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
         Alle ontwerpen
