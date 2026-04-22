@@ -6,7 +6,7 @@ Volledige website voor **AircoStunt** — React 18 frontend + Sanity Studio v3 h
 
 ```
 aircostunt/
-├── frontend/          # React 18 + Vite + Tailwind CSS
+├── frontend/          # React 18 + Vite + Tailwind CS
 │   ├── src/
 │   │   ├── components/      # React componenten
 │   │   ├── hooks/           # Custom hooks (Intersection Observer)
