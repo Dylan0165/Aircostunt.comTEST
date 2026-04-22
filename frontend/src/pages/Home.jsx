@@ -2,6 +2,7 @@ import Hero from '../components/Hero'
 import USPBar from '../components/USPBar'
 import Brands from '../components/Brands'
 import Reviews from '../components/Reviews'
+import WifiSection from '../components/WifiSection'
 import { BRANDS } from '../data/staticData'
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <Hero />
       <USPBar />
       <Brands brands={BRANDS} />
+      <WifiSection />
       <Reviews />
     </>
   )

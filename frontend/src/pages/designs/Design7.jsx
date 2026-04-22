@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
-import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE } from '../../data/staticData'
+import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE, OPENING_HOURS } from '../../data/staticData'
 import WhatsAppButton from '../../components/WhatsAppButton'
 
 const BASE = '/design/7'
@@ -102,7 +102,7 @@ const CSS = `
 .d7-brands-logos { display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; margin-top: 32px; }
 .d7-brand-logo { height: 38px; object-fit: contain; filter: grayscale(1) opacity(0.4); transition: filter 0.3s; }
 .d7-brand-logo:hover { filter: grayscale(0) opacity(1); }
-.d7-brand-logo-dark { filter: grayscale(1) brightness(2) opacity(0.3); }
+.d7-brand-logo-dark { filter: grayscale(1) brightness(2) opacity(0.3); height: 28px; max-width: 100px; }
 .d7-brand-logo-dark:hover { filter: grayscale(0) opacity(1); }
 .d7-brand-text { font-size: 13px; font-weight: 700; color: rgba(10,22,40,0.3); }
 .d7-brand-text-dark { color: rgba(255,255,255,0.25); }
@@ -199,6 +199,44 @@ textarea.d7-form-control { resize: vertical; min-height: 100px; }
   .d7-cta-strip { padding: 48px 24px; }
   .d7-page-hero { padding: 108px 24px 56px; }
 }
+@media (max-width: 768px) {
+  .d7-nav { padding: 0 16px; height: 60px; }
+  .d7-nav-logo { font-size: 17px; }
+  .d7-nav-links, .d7-nav-cta { display: none; }
+  .d7-hamburger { display: flex; }
+  .d7-mobile-menu { top: 60px; }
+  .d7-hero { padding: 80px 16px 56px; }
+  .d7-hero-inner { grid-template-columns: 1fr; gap: 0; }
+  .d7-hero-trust { display: none; }
+  .d7-hero-actions { flex-direction: column; gap: 10px; }
+  .d7-hero-actions .d7-btn { width: 100%; justify-content: center; }
+  .d7-section { padding: 40px 16px; }
+  .d7-products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+  .d7-reviews-grid { grid-template-columns: 1fr; }
+  .d7-brands-logos { gap: 20px; }
+  .d7-about-grid { grid-template-columns: 1fr; gap: 32px; }
+  .d7-contact-grid { grid-template-columns: 1fr; gap: 32px; }
+  .d7-stats-row { flex-direction: column; gap: 0; }
+  .d7-stat { border-radius: 0; }
+  .d7-stat:first-child { border-radius: 16px 16px 0 0; }
+  .d7-stat:last-child { border-radius: 0 0 16px 16px; }
+  .d7-footer-top { grid-template-columns: 1fr; gap: 24px; }
+  .d7-footer { padding: 40px 16px 20px; }
+  .d7-page-hero { padding: 88px 16px 40px; }
+  .d7-cta-strip { padding: 40px 16px; }
+  .d7-cta-strip-inner { flex-direction: column; gap: 20px; }
+  .d7-acc-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .d7-brands-pg-grid { grid-template-columns: 1fr; }
+  .d7-stats-2x2 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .d7-products-grid { grid-template-columns: 1fr; }
+  .d7-acc-grid { grid-template-columns: 1fr; }
+  .d7-brands-logos { flex-direction: column; align-items: center; gap: 16px; }
+  .d7-section { padding: 32px 14px; }
+  .d7-hero { padding: 72px 14px 48px; }
+  .d7-cta-strip { padding: 36px 14px; }
+}
 @keyframes d7-fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes d7-fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .d7-hero-eyebrow { animation: d7-fadeUp 0.5s ease both; }
@@ -210,6 +248,9 @@ textarea.d7-form-control { resize: vertical; min-height: 100px; }
 .d7-prod-card:hover { transform: translateY(-5px); box-shadow: 0 16px 48px rgba(0,100,200,0.12); }
 .d7-brand-logo-box { transition: transform 0.2s, box-shadow 0.2s; }
 .d7-brand-logo-box:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+.d7-spec-body::-webkit-scrollbar { width: 5px; }
+.d7-spec-body::-webkit-scrollbar-track { background: transparent; }
+.d7-spec-body::-webkit-scrollbar-thumb { background: #FF6600; border-radius: 10px; }
 `
 
 function D7Header() {
@@ -225,7 +266,10 @@ function D7Header() {
     <>
       <nav className="d7-nav">
         <NavLink to={`${BASE}/`} className="d7-nav-logo">
-          Airco<span>Stunt</span>
+          <div style={{ background: '#fff', borderRadius: 7, padding: '2px 5px', display: 'inline-flex', alignItems: 'center' }}>
+            <img src="/logoairco.png" alt="AircoStunt" style={{ height: 30, width: 'auto', display: 'block' }} onError={e => { e.currentTarget.style.display='none' }} />
+          </div>
+          <span style={{ display: 'none' }}>Airco<span style={{ color: '#FF6600' }}>Stunt</span></span>
         </NavLink>
         <div className="d7-nav-links">
           {links.map(l => (
@@ -382,7 +426,9 @@ function D7HomePage() {
           <div className="d7-section-title d7-section-title-light">Merken die wij voeren</div>
           <div className="d7-brands-logos">
             {BRANDS.map(b => b.logo
-              ? <img key={b.id} src={b.logo} alt={b.name} className="d7-brand-logo d7-brand-logo-dark" />
+              ? <div key={b.id} style={{ background: '#fff', borderRadius: 10, padding: '8px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <img src={b.logo} alt={b.name} style={{ height: 28, objectFit: 'contain', maxWidth: 100 }} />
+                </div>
               : <span key={b.id} className="d7-brand-text d7-brand-text-dark">{b.name}</span>
             )}
           </div>
@@ -405,6 +451,31 @@ function D7HomePage() {
           </div>
         </div>
       </div>
+
+      {/* WiFi feature section */}
+      <section style={{ background: '#f8fafc', padding: '80px 48px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ background: '#fff', borderRadius: 24, padding: 40, boxShadow: '0 8px 40px rgba(0,51,102,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src="/wifi.png" alt="WiFi module" style={{ maxWidth: 200, maxHeight: 200, objectFit: 'contain' }} />
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', color: '#FF6600', textTransform: 'uppercase', marginBottom: 14 }}>Inbegrepen bij elke airco</div>
+            <h2 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: 'clamp(26px,3.5vw,42px)', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: 16 }}>
+              Gratis WiFi-module inbegrepen
+            </h2>
+            <p style={{ fontSize: 16, color: '#64748b', lineHeight: 1.75, marginBottom: 24 }}>
+              Elke airco die u bij ons afhaalt heeft standaard een ingebouwde wifi-module. Bedien uw installatie overal ter wereld via de smartphone-app van uw merk.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {['MyDaikin', 'MELCloud', 'SmartThings', 'LG ThinQ'].map(app => (
+                <span key={app} style={{ background: '#001E3C', color: '#fff', fontSize: 12, padding: '7px 18px', borderRadius: 6, fontWeight: 600 }}>{app}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Orange CTA */}
       <div className="d7-cta-strip">
@@ -437,7 +508,7 @@ function D7MerkenPage() {
           <div className="d7-brands-pg-grid">
             {BRANDS.map(b => (
               <div key={b.id} className="d7-brand-pg-card">
-                {b.logo && <img src={b.logo} alt={b.name} className="d7-brand-pg-logo" />}
+                {b.logo && <div style={{ background: 'rgba(0,30,60,0.05)', borderRadius: 10, padding: '12px 20px', marginBottom: 16, display: 'inline-flex' }}><img src={b.logo} alt={b.name} style={{ height: 36, objectFit: 'contain', maxWidth: 120 }} /></div>}
                 <div className="d7-brand-pg-stripe" />
                 <div className="d7-brand-pg-name">{b.name}</div>
                 <p className="d7-brand-pg-desc">{b.description}</p>
@@ -450,12 +521,49 @@ function D7MerkenPage() {
   )
 }
 
+function D7SpecModal({ product, onClose }) {
+  useEffect(() => {
+    const onKey = e => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
+  }, [onClose])
+  const s = product.specs || {}
+  const rows = [['Koelcapaciteit',s.koelcapaciteit],['Verwarmingscapaciteit',s.verwarmingscapaciteit],['Energielabel koeling',s.energielabelKoeling],['Energielabel verwarming',s.energielabelVerwarming],['SEER',s.seer],['SCOP',s.scop],['Geluid (binnen)',s.geluidBinnen],['Geluid (buiten)',s.geluidBuiten],['Koudemiddel',s.koudemiddel],['Afmetingen binnenunit',s.afmetingenBinnen],['Gewicht binnenunit',s.gewichtBinnen],['WiFi',s.wifi],['Geschikt voor',s.geschiktVoor],['Stroomverbruik',s.verbruikNominaal]].filter(([,v])=>v)
+  return (
+    <div onClick={e=>e.target===e.currentTarget&&onClose()} style={{position:'fixed',inset:0,zIndex:9000,background:'rgba(0,10,30,0.8)',backdropFilter:'blur(8px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16}}>
+      <div className="d7-spec-body" style={{background:'#fff',borderRadius:16,width:'100%',maxWidth:540,maxHeight:'90vh',overflowY:'auto',boxShadow:'0 40px 100px rgba(0,0,0,0.4)',scrollbarWidth:'thin',scrollbarColor:'#FF6600 transparent'}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'20px 24px',borderBottom:'1px solid #f0f4f8',background:'#f8fafc',borderRadius:'16px 16px 0 0'}}>
+          <div><div style={{fontSize:11,color:'#FF6600',fontWeight:700,letterSpacing:'0.1em',marginBottom:4,textTransform:'uppercase'}}>{BRANDS.find(b=>b.id===product.brandId)?.name}</div><div style={{fontSize:20,fontWeight:800,color:'#0f172a'}}>{product.name}</div></div>
+          <button onClick={onClose} style={{background:'#e2e8f0',border:'none',width:36,height:36,borderRadius:8,cursor:'pointer',fontSize:20,color:'#64748b'}}>×</button>
+        </div>
+        {product.image&&<div style={{background:'#f8fafc',display:'flex',alignItems:'center',justifyContent:'center',height:180}}><img src={product.image} alt={product.name} style={{maxHeight:140,maxWidth:'100%',objectFit:'contain'}}/></div>}
+        <div style={{padding:'20px 24px'}}>
+          <div style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',color:'#94a3b8',marginBottom:12,textTransform:'uppercase'}}>Technische specificaties</div>
+          {rows.map(([label,value],i)=>(
+            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 16px',borderBottom:'1px solid #e8eef5',fontSize:14,background:i%2===0?'#f8faff':'transparent'}}>
+              <span style={{color:'#64748b',fontWeight:600}}>{label}</span>
+              <span style={{color:'#FF6600',fontWeight:700,textAlign:'right',marginLeft:16,maxWidth:'55%'}}>{value}</span>
+            </div>
+          ))}
+          <div style={{marginTop:20,background:'#001E3C',borderRadius:12,padding:'16px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:12}}>
+            <div><div style={{fontSize:11,color:'rgba(255,255,255,0.4)',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase'}}>Prijs</div><div style={{fontSize:26,fontWeight:800,color:'#fff'}}>€{product.priceFrom} <span style={{fontSize:13,color:'rgba(255,255,255,0.5)',fontWeight:400}}>incl. BTW</span></div></div>
+            <a href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`} style={{background:'#FF6600',color:'#fff',padding:'12px 24px',borderRadius:8,fontSize:13,fontWeight:700,textDecoration:'none',whiteSpace:'nowrap'}}>Bel voor info</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function D7ProductenPage() {
   const [active, setActive] = useState('all')
+  const [sel, setSel] = useState(null)
   const brandIds = ['all', ...BRANDS.map(b => b.id)]
   const filtered = active === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.brandId === active)
   return (
     <div>
+      {sel && <D7SpecModal product={sel} onClose={() => setSel(null)} />}
       <div className="d7-page-hero">
         <div className="d7-page-hero-inner">
           <div className="d7-page-hero-eyebrow">Assortiment</div>
@@ -489,7 +597,10 @@ function D7ProductenPage() {
                   <ul className="d7-product-feats">
                     {p.features.slice(0, 3).map((f, i) => <li key={i}>{f}</li>)}
                   </ul>
-                  <div className="d7-product-price"><small>v.a. </small>&euro;{p.priceFrom}</div>
+                  <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginTop:10}}>
+                    <div className="d7-product-price"><small>v.a. </small>&euro;{p.priceFrom}</div>
+                    <button onClick={() => setSel(p)} style={{background:'none',border:'1.5px solid #003366',color:'#003366',padding:'5px 16px',borderRadius:6,fontSize:12,fontWeight:700,cursor:'pointer'}}>Specs</button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -579,50 +690,85 @@ function D7ContactPage() {
       </div>
       <div className="d7-white-section">
         <section className="d7-section">
-          <div className="d7-contact-grid">
-            <div className="d7-contact-info">
-              <h2>Wij staan voor u klaar</h2>
-              {[
-                { label: 'Telefoon', val: SITE.phone, href: `tel:${SITE.phone.replace(/[^0-9+]/g,'')}`, icon: <path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/> },
-                { label: 'E-mail', val: SITE.email, href: `mailto:${SITE.email}`, icon: <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/> },
-                { label: 'Adres', val: SITE.address, icon: <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/> },
-                { label: 'Openingstijden', val: 'Ma-Vr 09:00-20:00 | Za 09:00-13:00', icon: <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/> },
-              ].map(d => (
-                <div key={d.label} className="d7-contact-detail">
-                  <div className="d7-contact-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor">{d.icon}</svg>
-                  </div>
-                  <div>
-                    <div className="d7-contact-label">{d.label}</div>
-                    <div className="d7-contact-val">
-                      {d.href ? <a href={d.href}>{d.val}</a> : d.val}
-                    </div>
-                  </div>
-                </div>
-              ))}
+          {/* Opening hours + contact info grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, marginBottom: 40 }}>
+            {/* Opening hours card */}
+            <div style={{ background: '#f8faff', border: '1px solid rgba(0,30,60,0.08)', borderRadius: 16, padding: 32 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#FF6600', marginBottom: 20 }}>Openingstijden</div>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <tbody>
+                  <tr style={{ borderBottom: '1px solid rgba(0,30,60,0.06)' }}>
+                    <td style={{ padding: '10px 0', fontSize: 14, fontWeight: 600, color: 'rgba(10,22,40,0.55)' }}>Maandag t/m vrijdag</td>
+                    <td style={{ padding: '10px 0', fontSize: 14, color: '#001E3C', textAlign: 'right', fontWeight: 700 }}>{OPENING_HOURS.weekdaysFrom} - {OPENING_HOURS.weekdaysTo}</td>
+                  </tr>
+                  <tr style={{ borderBottom: '1px solid rgba(0,30,60,0.06)' }}>
+                    <td style={{ padding: '10px 0', fontSize: 14, fontWeight: 600, color: 'rgba(10,22,40,0.55)' }}>Zaterdag</td>
+                    <td style={{ padding: '10px 0', fontSize: 14, color: '#001E3C', textAlign: 'right', fontWeight: 700 }}>{OPENING_HOURS.saturdayFrom} - {OPENING_HOURS.saturdayTo}</td>
+                  </tr>
+                  <tr>
+                    <td style={{ padding: '10px 0', fontSize: 14, fontWeight: 600, color: 'rgba(10,22,40,0.55)' }}>Zondag</td>
+                    <td style={{ padding: '10px 0', fontSize: 14, color: 'rgba(10,22,40,0.3)', textAlign: 'right', fontWeight: 600 }}>{OPENING_HOURS.sundayClosed ? 'Gesloten' : 'Open'}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style={{ marginTop: 20, padding: '10px 14px', background: 'rgba(255,102,0,0.08)', borderRadius: 8, fontSize: 13, color: '#FF6600', fontWeight: 700 }}>
+                Bel {OPENING_HOURS.callAheadMinutes} minuten van tevoren
+              </div>
             </div>
-            <div className="d7-form-card">
-              <h3 style={{ fontSize: 20, fontWeight: 800, color: '#fff', marginBottom: 24 }}>Stuur een bericht</h3>
-              <form onSubmit={e => e.preventDefault()}>
-                {[
-                  { label: 'Naam', type: 'text', ph: 'Uw naam' },
-                  { label: 'Telefoon', type: 'tel', ph: 'Uw telefoonnummer' },
-                  { label: 'E-mail', type: 'email', ph: 'Uw e-mailadres' },
-                ].map(f => (
-                  <div key={f.label} className="d7-form-group">
-                    <label className="d7-form-label">{f.label}</label>
-                    <input type={f.type} placeholder={f.ph} className="d7-form-control" />
-                  </div>
-                ))}
-                <div className="d7-form-group">
-                  <label className="d7-form-label">Bericht</label>
-                  <textarea placeholder="Uw bericht of vraag..." className="d7-form-control" rows={4} />
+
+            {/* Contact info card */}
+            <div style={{ background: '#f8faff', border: '1px solid rgba(0,30,60,0.08)', borderRadius: 16, padding: 32 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#FF6600', marginBottom: 20 }}>Contactgegevens</div>
+              <div className="d7-contact-detail">
+                <div className="d7-contact-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 20, height: 20, color: '#FF6600' }}><path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg>
                 </div>
-                <button type="submit" className="d7-btn d7-btn-orange" style={{ width: '100%', justifyContent: 'center' }}>
-                  Verstuur bericht
-                </button>
-              </form>
+                <div>
+                  <div className="d7-contact-label">Telefoon</div>
+                  <div className="d7-contact-val"><a href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`}>{SITE.phone}</a></div>
+                </div>
+              </div>
+              <div className="d7-contact-detail">
+                <div className="d7-contact-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 20, height: 20, color: '#FF6600' }}><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                </div>
+                <div>
+                  <div className="d7-contact-label">E-mail</div>
+                  <div className="d7-contact-val"><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div>
+                </div>
+              </div>
+              <div className="d7-contact-detail">
+                <div className="d7-contact-icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 20, height: 20, color: '#FF6600' }}><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                </div>
+                <div>
+                  <div className="d7-contact-label">Adres</div>
+                  <div className="d7-contact-val">{SITE.address}</div>
+                </div>
+              </div>
+              <div style={{ marginTop: 16, padding: '10px 14px', background: '#fff', borderRadius: 8, fontSize: 13, color: 'rgba(10,22,40,0.45)', fontWeight: 600, border: '1px solid rgba(0,30,60,0.08)' }}>
+                Alleen afhalen — geen verzending
+              </div>
             </div>
+          </div>
+
+          {/* Google Maps embed */}
+          <div style={{ width: '100%', height: 300, borderRadius: 16, overflow: 'hidden', marginBottom: 40, border: '1px solid rgba(0,30,60,0.08)' }}>
+            <iframe
+              src="https://maps.google.com/maps?q=Veerplaat+10,+3313+LJ+Dordrecht&output=embed"
+              width="100%"
+              height="300"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              title="AircoStunt locatie"
+            />
+          </div>
+
+          {/* CTA buttons */}
+          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+            <a href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`} className="d7-btn d7-btn-orange">Bel nu</a>
+            <a href={`mailto:${SITE.email}`} className="d7-btn d7-btn-navy">Stuur e-mail</a>
           </div>
         </section>
       </div>

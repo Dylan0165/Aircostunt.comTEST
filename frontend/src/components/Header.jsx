@@ -87,19 +87,13 @@ export default function Header({ base = '/design/1' }) {
         <div className="flex items-center justify-between h-16">
           {/* Logo / Site name */}
           <Link to="/" className="flex-shrink-0 flex items-center gap-2 group">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 bg-white rounded-xl flex items-center justify-center shadow-sm flex-shrink-0">
-                <img
-                  src="/logo.png"
-                  alt=""
-                  className="w-7 h-7 object-contain"
-                  aria-hidden="true"
-                  onError={(e) => { e.currentTarget.style.display = 'none' }}
-                />
-              </div>
-              <span className="text-white font-bold text-lg tracking-tight leading-none">
-                Airco<span className="text-accent">Stunt</span>
-              </span>
+            <div style={{ background: '#fff', borderRadius: 8, padding: '3px 6px', display: 'inline-flex', alignItems: 'center' }}>
+              <img
+                src="/logoairco.png"
+                alt="AircoStunt"
+                className="h-8 w-auto object-contain"
+                onError={(e) => { e.currentTarget.style.display = 'none' }}
+              />
             </div>
           </Link>
 

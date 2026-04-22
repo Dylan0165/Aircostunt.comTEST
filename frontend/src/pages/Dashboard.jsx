@@ -17,20 +17,6 @@ const designs = [
     pages: ['Home', 'Merken', 'Producten', 'Over ons', 'Contact'],
   },
   {
-    id: 2,
-    name: 'Redactioneel & Magazine',
-    tag: 'Editorial stijl',
-    desc: 'Playfair Display serif, asymmetrische kolommen, crème achtergrond en een chique magazine-uitstraling.',
-    font: 'Playfair Display',
-    preview: {
-      header: '#F7F2E8', headerAccent: '#FF6600',
-      hero: 'linear-gradient(90deg, #F5EDD8 0%, #fff 100%)',
-      heroText: '#1a1208', card: '#ffffff', cardBorder: '#e8e0d0',
-      accent: '#FF6600',
-    },
-    pages: ['Home', 'Merken', 'Producten', 'Over ons', 'Contact'],
-  },
-  {
     id: 4,
     name: 'Donker & Futuristisch',
     tag: 'Dark mode',
@@ -315,101 +301,34 @@ function DesignCard({ design: d }) {
 
 const webshopDesigns = [
   {
-    id: 'ws-1',
-    name: 'Webshop + afhalen',
-    tag: 'Uitbreiding',
-    desc: 'Zelfde uitstraling als het huidige concept, uitgebreid met online winkelwagen, productpaginas en directe bestelling. Klant betaalt online, haalt op.',
-    features: ['Online winkelwagen', 'Productdetailpaginas', 'Betalen via iDEAL / creditcard', 'Voorraadbeheer', 'Orderbevestiging per mail'],
-    accent: '#FF6600',
-    bg: 'linear-gradient(135deg, #001a33 0%, #003366 100%)',
+    id: 2,
+    name: 'Webshop Concept 1',
+    tag: 'Click & Collect',
+    desc: 'Strak wit design met Manrope-lettertype. Winkelwagen, checkout met afhaalplanning en bevestigingspagina. Betalen bij afhalen.',
+    font: 'Manrope',
+    preview: {
+      header: '#ffffff', headerAccent: '#FF6600',
+      hero: 'linear-gradient(135deg, #0F172A 0%, #1E3A5F 100%)',
+      heroText: '#ffffff', card: '#F8FAFC', cardBorder: '#E2E8F0',
+      accent: '#FF6600',
+    },
+    pages: ['Home', 'Merken', 'Producten', 'Over ons', 'Contact'],
   },
   {
-    id: 'ws-2',
-    name: 'Webshop met verzending',
-    tag: 'Volledig e-commerce',
-    desc: 'Complete webshop inclusief landelijke verzending. Geschikt voor schaalbare groei. Koppelbaar aan PostNL, DPD en boekhoudpakketten.',
-    features: ['Landelijke verzending', 'Koppeling PostNL / DPD', 'Boekhoudkoppeling', 'Klantaccounts', 'Aanbiedings- en kortingssysteem'],
-    accent: '#7c3aed',
-    bg: 'linear-gradient(135deg, #1a0a3a 0%, #2d1b69 100%)',
+    id: 3,
+    name: 'Webshop Concept 2',
+    tag: 'Dark Premium',
+    desc: 'Donker premium design met Outfit-lettertype. Cart drawer, spec modal, 2-staps checkout. Alleen afhalen in Dordrecht.',
+    font: 'Outfit',
+    preview: {
+      header: '#111827', headerAccent: '#FF6600',
+      hero: 'linear-gradient(135deg, #111827 0%, #1F2937 100%)',
+      heroText: '#F9FAFB', card: '#1F2937', cardBorder: '#374151',
+      accent: '#FF6600',
+    },
+    pages: ['Home', 'Merken', 'Producten', 'Over ons', 'Contact'],
   },
 ]
-
-function WebshopCard({ ws }) {
-  return (
-    <div style={{
-      background: 'rgba(255,255,255,0.04)',
-      border: '1px solid rgba(255,255,255,0.1)',
-      borderRadius: 18,
-      overflow: 'hidden',
-      transition: 'all 0.25s',
-    }}
-      onMouseEnter={e => {
-        e.currentTarget.style.background = 'rgba(255,255,255,0.07)'
-        e.currentTarget.style.borderColor = `${ws.accent}55`
-        e.currentTarget.style.transform = 'translateY(-3px)'
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.background = 'rgba(255,255,255,0.04)'
-        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
-        e.currentTarget.style.transform = 'none'
-      }}
-    >
-      {/* Mini webshop preview */}
-      <div style={{ height: 120, background: ws.bg, padding: 16, position: 'relative', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
-          <div style={{ flex: 1, height: 8, background: 'rgba(255,255,255,0.15)', borderRadius: 3 }} />
-          <div style={{ width: 60, height: 8, background: ws.accent, borderRadius: 3, opacity: 0.8 }} />
-        </div>
-        <div style={{ display: 'flex', gap: 6 }}>
-          {[...Array(3)].map((_, i) => (
-            <div key={i} style={{ flex: 1, background: 'rgba(255,255,255,0.07)', borderRadius: 6, padding: 6 }}>
-              <div style={{ height: 32, background: 'rgba(255,255,255,0.1)', borderRadius: 3, marginBottom: 4 }} />
-              <div style={{ height: 5, background: 'rgba(255,255,255,0.2)', borderRadius: 2, marginBottom: 3 }} />
-              <div style={{ height: 8, background: ws.accent, borderRadius: 3, width: '60%', opacity: 0.8 }} />
-            </div>
-          ))}
-        </div>
-        {/* Cart icon */}
-        <div style={{
-          position: 'absolute', top: 14, right: 14,
-          width: 28, height: 28, background: ws.accent, borderRadius: '50%',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <svg width="14" height="14" fill="white" viewBox="0 0 24 24">
-            <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 16.1 5.9 17 7 17h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H19c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0023.45 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
-          </svg>
-        </div>
-      </div>
-
-      <div style={{ padding: '18px 20px 20px' }}>
-        <span style={{
-          display: 'inline-block', marginBottom: 8,
-          background: `${ws.accent}22`, color: ws.accent,
-          fontSize: 10, fontWeight: 700, letterSpacing: '0.1em',
-          textTransform: 'uppercase', padding: '3px 10px', borderRadius: 9999,
-          border: `1px solid ${ws.accent}44`,
-        }}>{ws.tag}</span>
-        <h3 style={{ margin: '0 0 8px', fontSize: 17, fontWeight: 700, color: '#fff' }}>{ws.name}</h3>
-        <p style={{ margin: '0 0 16px', fontSize: 13, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>{ws.desc}</p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {ws.features.map(f => (
-            <span key={f} style={{
-              fontSize: 11, padding: '3px 10px', borderRadius: 50,
-              background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.5)',
-              border: '1px solid rgba(255,255,255,0.08)',
-            }}>{f}</span>
-          ))}
-        </div>
-        <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: 6, color: ws.accent, fontSize: 13, fontWeight: 700 }}>
-          Meer informatie opvragen
-          <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 export default function Dashboard() {
   return (
@@ -449,14 +368,14 @@ export default function Dashboard() {
             letterSpacing: '0.12em', color: '#FF9944', marginBottom: 24, textTransform: 'uppercase',
           }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6600', display: 'inline-block' }} />
-            6 unieke websiteconcepten voor aircostunt.com
+            7 unieke websiteconcepten voor aircostunt.com
           </div>
 
           <h1 style={{ fontSize: 'clamp(22px, 3.5vw, 38px)', fontWeight: 800, lineHeight: 1.15, marginBottom: 16, letterSpacing: '-0.02em' }}>
             Welk websiteontwerp past het beste bij AircoStunt?
           </h1>
           <p style={{ fontSize: 16, opacity: 0.55, maxWidth: 560, margin: '0 auto', lineHeight: 1.75 }}>
-            Hieronder staan 6 volledig uitgewerkte websiteconcepten. Klik op een pagina-tab om de preview te wisselen, of klik op de kaart om het volledige design te bekijken met werkende navigatie.
+            Hieronder staan 7 volledig uitgewerkte websiteconcepten — waarvan 2 werkende webshops met winkelwagen en checkout. Klik op een pagina-tab om de preview te wisselen, of klik op de kaart om het volledige design te bekijken.
           </p>
         </header>
 
@@ -478,7 +397,7 @@ export default function Dashboard() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
           <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.07)' }} />
           <span style={{ fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>
-            Met webshop uitbreiding
+            Werkende webshop — alleen afhalen
           </span>
           <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.07)' }} />
         </div>
@@ -493,46 +412,26 @@ export default function Dashboard() {
           <div style={{ marginBottom: 28, maxWidth: 680 }}>
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
-              background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.3)',
+              background: 'rgba(255,102,0,0.12)', border: '1px solid rgba(255,102,0,0.3)',
               borderRadius: 9999, padding: '4px 14px', fontSize: 11,
-              letterSpacing: '0.1em', color: '#a78bfa', marginBottom: 14, textTransform: 'uppercase',
+              letterSpacing: '0.1em', color: '#FF9944', marginBottom: 14, textTransform: 'uppercase',
             }}>
-              <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              Toekomstige uitbreiding mogelijk
+              <svg width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17M17 13v4a2 2 0 1 1-4 0M9 21a2 2 0 1 1-4 0" /></svg>
+              Volledig werkende webshop — direct klikbaar
             </div>
             <h2 style={{ fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 800, marginBottom: 10, letterSpacing: '-0.02em' }}>
-              Van informatieve website naar volledige webshop
+              Bestellen & afhalen in Dordrecht
             </h2>
             <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
-              Elk van de bovenstaande ontwerpen kan worden uitgebreid met een volledig functionerende webshop. Klanten kunnen dan online bestellen, betalen en een ophaalmoment kiezen. Dit is een natuurlijke vervolgstap zodra de website staat.
+              Twee volledig uitgewerkte webshop-concepten met werkende winkelwagen, checkout en bevestigingspagina. Klanten kiezen een afhaaltijdstip en betalen bij afhalen. Geen verzending via PostNL.
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 18 }}>
-            {webshopDesigns.map(ws => <WebshopCard key={ws.id} ws={ws} />)}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 18 }}>
+            {webshopDesigns.map(d => <DesignCard key={d.id} design={d} />)}
           </div>
         </div>
 
-        {/* Info strip */}
-        <div style={{
-          background: 'rgba(255,102,0,0.06)',
-          border: '1px solid rgba(255,102,0,0.15)',
-          borderRadius: 14,
-          padding: '20px 24px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 16,
-          flexWrap: 'wrap',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flex: 1 }}>
-            <div style={{ width: 36, height: 36, background: 'rgba(255,102,0,0.15)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <svg width="18" height="18" fill="#FF9944" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-            </div>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', margin: 0, lineHeight: 1.6 }}>
-              Alle designs zijn responsief, volledig uitgewerkt en direct deploybaar via Vercel. Elke pagina bevat echte productgegevens, klantreviews en werkende navigatie.
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   )

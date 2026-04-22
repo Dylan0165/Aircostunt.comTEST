@@ -15,6 +15,7 @@ function BrandCard({ brand }) {
             src={brand.logo}
             alt={brand.name}
             className="max-h-20 max-w-full w-auto object-contain group-hover:scale-105 transition-transform duration-300"
+            style={{ mixBlendMode: 'multiply' }}
             loading="lazy"
           />
         ) : (

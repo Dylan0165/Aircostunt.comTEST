@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
-import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE } from '../../data/staticData'
+import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE, OPENING_HOURS } from '../../data/staticData'
 import WhatsAppButton from '../../components/WhatsAppButton'
 
 const BASE = '/design/4'
@@ -83,8 +83,8 @@ const CSS = `
 
 .d4-brands-section { background: #0a1428; border-top: 1px solid rgba(0,200,255,0.08); border-bottom: 1px solid rgba(0,200,255,0.08); padding: 56px 40px; }
 .d4-brands-grid { display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; max-width: 1200px; margin: 24px auto 0; }
-.d4-brand-logo { height: 36px; object-fit: contain; filter: grayscale(1) brightness(2) opacity(0.3); transition: filter 0.3s; }
-.d4-brand-logo:hover { filter: grayscale(0) opacity(1); }
+.d4-brand-logo { height: 28px; object-fit: contain; max-width: 100px; transition: filter 0.3s; }
+.d4-brand-logo:hover { filter: brightness(1.1); }
 .d4-brand-text { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(200,216,240,0.25); }
 
 .d4-reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: rgba(0,200,255,0.08); }
@@ -174,6 +174,41 @@ textarea.d4-form-control { resize: vertical; min-height: 100px; }
   .d4-page-hero { padding: 100px 24px 48px; }
   .d4-cta-section { padding: 72px 24px; }
 }
+@media (max-width: 768px) {
+  .d4-nav { padding: 0 16px; height: 56px; }
+  .d4-nav-logo { font-size: 17px; }
+  .d4-nav-links, .d4-nav-cta { display: none; }
+  .d4-hamburger { display: flex; }
+  .d4-mobile-menu { top: 56px; }
+  .d4-hero { padding: 72px 16px 48px; flex-direction: column; align-items: flex-start; }
+  .d4-hero-content { max-width: 100%; }
+  .d4-hero-stats { display: none; }
+  .d4-hero-actions { flex-direction: column; gap: 10px; }
+  .d4-hero-actions .d4-btn { width: 100%; text-align: center; justify-content: center; }
+  .d4-section { padding: 40px 16px; }
+  .d4-products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1px; }
+  .d4-reviews-grid { grid-template-columns: 1fr; }
+  .d4-brands-grid { gap: 20px; }
+  .d4-brands-section { padding: 36px 16px; }
+  .d4-about-grid { grid-template-columns: 1fr; gap: 32px; }
+  .d4-contact-grid { grid-template-columns: 1fr; gap: 32px; }
+  .d4-footer-top { grid-template-columns: 1fr; gap: 24px; }
+  .d4-footer { padding: 40px 16px 20px; }
+  .d4-page-hero { padding: 80px 16px 36px; }
+  .d4-cta-section { padding: 48px 16px; }
+  .d4-acc-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .d4-brands-page-grid { grid-template-columns: 1fr; }
+  .d4-stats-block { grid-template-columns: 1fr 1fr; }
+  .d4-filter-bar { gap: 6px; }
+}
+@media (max-width: 480px) {
+  .d4-products-grid { grid-template-columns: 1fr; }
+  .d4-acc-grid { grid-template-columns: 1fr; }
+  .d4-brands-grid { flex-direction: column; align-items: center; gap: 16px; }
+  .d4-section { padding: 32px 14px; }
+  .d4-hero { padding: 64px 14px 40px; }
+  .d4-cta-section { padding: 40px 14px; }
+}
 @keyframes d4-fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes d4-fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes d4-slideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
@@ -186,6 +221,9 @@ textarea.d4-form-control { resize: vertical; min-height: 100px; }
 .d4-product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,200,255,0.12); }
 .d4-brand-card-pg { transition: transform 0.2s; }
 .d4-brand-card-pg:hover { transform: translateY(-2px); }
+.d4-spec-body::-webkit-scrollbar { width: 5px; }
+.d4-spec-body::-webkit-scrollbar-track { background: transparent; }
+.d4-spec-body::-webkit-scrollbar-thumb { background: #FF6600; border-radius: 10px; }
 `
 
 function D4Header() {
@@ -202,7 +240,10 @@ function D4Header() {
       <nav className="d4-nav">
         <NavLink to={`${BASE}/`} className="d4-nav-logo">
           <div className="d4-nav-logo-dot" />
-          Airco<span>Stunt</span>
+          <div style={{ background: '#fff', borderRadius: 7, padding: '2px 5px', display: 'inline-flex', alignItems: 'center' }}>
+            <img src="/logoairco.png" alt="AircoStunt" style={{ height: 30, width: 'auto', display: 'block' }} onError={e => { e.currentTarget.style.display='none' }} />
+          </div>
+          <span style={{ display: 'none' }}>Airco<span style={{ color: '#FF6600' }}>Stunt</span></span>
         </NavLink>
         <div className="d4-nav-links">
           {links.map(l => (
@@ -337,7 +378,9 @@ function D4HomePage() {
         </div>
         <div className="d4-brands-grid">
           {BRANDS.map(b => b.logo
-            ? <img key={b.id} src={b.logo} alt={b.name} className="d4-brand-logo" />
+            ? <div key={b.id} style={{ background: '#fff', borderRadius: 10, padding: '8px 16px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={b.logo} alt={b.name} style={{ height: 28, objectFit: 'contain', maxWidth: 100 }} />
+              </div>
             : <span key={b.id} className="d4-brand-text">{b.name}</span>
           )}
         </div>
@@ -357,6 +400,34 @@ function D4HomePage() {
               <div className="d4-review-name">{r.name}</div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* WiFi feature section */}
+      <section style={{ background: 'linear-gradient(135deg, #0e1c38, #0a1428)', borderTop: '1px solid rgba(0,200,255,0.1)', borderBottom: '1px solid rgba(0,200,255,0.1)', padding: '80px 40px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+          <div>
+            <div style={{ fontSize: 11, color: '#00C8FF', letterSpacing: '0.2em', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ display: 'block', width: 24, height: 1, background: '#00C8FF' }} />
+              INBEGREPEN BIJ ELKE AIRCO
+            </div>
+            <h2 style={{ fontFamily: 'Rajdhani,Arial,sans-serif', fontSize: 'clamp(30px,4vw,48px)', fontWeight: 700, color: '#fff', textTransform: 'uppercase', lineHeight: 1, marginBottom: 20 }}>
+              Gratis <span style={{ color: '#FF6600' }}>WiFi</span> module inbegrepen
+            </h2>
+            <p style={{ fontSize: 15, color: 'rgba(200,216,240,0.5)', lineHeight: 1.8, marginBottom: 24 }}>
+              Stuur uw airco aan via uw smartphone, waar u ook bent. Elke split-unit die wij leveren wordt standaard geleverd met een gratis ingebouwde wifi-module.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {['MyDaikin app', 'MELCloud app', 'SmartThings', 'LG ThinQ'].map(app => (
+                <span key={app} style={{ background: 'rgba(0,200,255,0.06)', border: '1px solid rgba(0,200,255,0.2)', color: '#00C8FF', fontSize: 11, letterSpacing: '0.1em', padding: '6px 14px', fontWeight: 500 }}>{app}</span>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ background: 'rgba(255,255,255,0.05)', borderRadius: 24, padding: 40, border: '1px solid rgba(0,200,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src="/wifi.png" alt="WiFi module" style={{ maxWidth: 180, maxHeight: 180, objectFit: 'contain' }} />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -383,7 +454,7 @@ function D4MerkenPage() {
         <div className="d4-brands-page-grid">
           {BRANDS.map(b => (
             <div key={b.id} className="d4-brand-card-pg">
-              {b.logo && <img src={b.logo} alt={b.name} className="d4-brand-card-pg-logo" />}
+              {b.logo && <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 10, padding: '12px 20px', marginBottom: 16, display: 'inline-flex' }}><img src={b.logo} alt={b.name} style={{ height: 36, objectFit: 'contain', filter: 'brightness(0) invert(1)', maxWidth: 120 }} /></div>}
               <div className="d4-brand-card-pg-accent" />
               <div className="d4-brand-card-pg-name">{b.name}</div>
               <p className="d4-brand-card-pg-desc">{b.description}</p>
@@ -395,12 +466,49 @@ function D4MerkenPage() {
   )
 }
 
+function D4SpecModal({ product, onClose }) {
+  useEffect(() => {
+    const onKey = e => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
+  }, [onClose])
+  const s = product.specs || {}
+  const rows = [['Koelcapaciteit',s.koelcapaciteit],['Verwarmingscapaciteit',s.verwarmingscapaciteit],['Energielabel koeling',s.energielabelKoeling],['Energielabel verwarming',s.energielabelVerwarming],['SEER',s.seer],['SCOP',s.scop],['Geluid (binnen)',s.geluidBinnen],['Geluid (buiten)',s.geluidBuiten],['Koudemiddel',s.koudemiddel],['Afmetingen binnenunit',s.afmetingenBinnen],['Gewicht binnenunit',s.gewichtBinnen],['WiFi',s.wifi],['Geschikt voor',s.geschiktVoor],['Stroomverbruik',s.verbruikNominaal]].filter(([,v])=>v)
+  return (
+    <div onClick={e=>e.target===e.currentTarget&&onClose()} style={{position:'fixed',inset:0,zIndex:9000,background:'rgba(0,0,0,0.85)',display:'flex',alignItems:'center',justifyContent:'center',padding:16}}>
+      <div className="d4-spec-body" style={{background:'#0a1428',border:'1px solid rgba(0,200,255,0.15)',borderRadius:4,width:'100%',maxWidth:540,maxHeight:'90vh',overflowY:'auto',scrollbarWidth:'thin',scrollbarColor:'#FF6600 transparent'}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'18px 24px',borderBottom:'1px solid rgba(0,200,255,0.1)'}}>
+          <div><div style={{fontSize:10,color:'#00C8FF',letterSpacing:'0.2em',marginBottom:4}}>{product.brandId?.toUpperCase()}</div><div style={{fontSize:20,fontWeight:700,color:'#fff',fontFamily:'Rajdhani,Arial,sans-serif'}}>{product.name}</div></div>
+          <button onClick={onClose} style={{background:'rgba(0,200,255,0.06)',border:'1px solid rgba(0,200,255,0.2)',color:'#00C8FF',width:34,height:34,borderRadius:2,cursor:'pointer',fontSize:20,lineHeight:1}}>×</button>
+        </div>
+        {product.image&&<div style={{background:'#060C18',display:'flex',alignItems:'center',justifyContent:'center',height:180}}><img src={product.image} alt={product.name} style={{maxHeight:140,maxWidth:'100%',objectFit:'contain'}}/></div>}
+        <div style={{padding:'16px 24px'}}>
+          <div style={{fontSize:10,letterSpacing:'0.2em',color:'rgba(200,216,240,0.35)',marginBottom:10}}>// SPECIFICATIES</div>
+          {rows.map(([label,value],i)=>(
+            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 16px',borderBottom:'1px solid rgba(0,200,255,0.06)',fontSize:13,background:i%2===0?'rgba(0,200,255,0.03)':'transparent'}}>
+              <span style={{color:'rgba(200,216,240,0.45)',fontWeight:600}}>{label}</span>
+              <span style={{color:'#00C8FF',fontWeight:700,textAlign:'right',marginLeft:16,maxWidth:'55%'}}>{value}</span>
+            </div>
+          ))}
+          <div style={{marginTop:18,display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:12}}>
+            <div><div style={{fontSize:10,color:'rgba(200,216,240,0.35)',letterSpacing:'0.15em'}}>PRIJS</div><div style={{fontSize:26,fontWeight:700,color:'#FF6600',fontFamily:'Rajdhani,Arial,sans-serif'}}>€{product.priceFrom} <span style={{fontSize:12,color:'rgba(200,216,240,0.4)'}}>incl. BTW</span></div></div>
+            <a href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`} style={{background:'linear-gradient(135deg,#FF6600,#FF8533)',color:'#fff',padding:'10px 22px',fontSize:12,fontWeight:600,letterSpacing:'0.08em',textDecoration:'none',clipPath:'polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%)'}}>Bel voor info</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function D4ProductenPage() {
   const [active, setActive] = useState('all')
+  const [sel, setSel] = useState(null)
   const brandIds = ['all', ...BRANDS.map(b => b.id)]
   const filtered = active === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.brandId === active)
   return (
     <div>
+      {sel && <D4SpecModal product={sel} onClose={() => setSel(null)} />}
       <div className="d4-page-hero">
         <div className="d4-page-hero-eyebrow">Assortiment</div>
         <h1>Alle producten</h1>
@@ -428,7 +536,10 @@ function D4ProductenPage() {
               <ul className="d4-product-features">
                 {p.features.slice(0, 3).map((f, i) => <li key={i}>{f}</li>)}
               </ul>
-              <div className="d4-product-price"><small>v.a. </small>&euro;{p.priceFrom}</div>
+              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginTop:10}}>
+                <div className="d4-product-price"><small>v.a. </small>&euro;{p.priceFrom}</div>
+                <button onClick={() => setSel(p)} className="d4-filter-btn" style={{fontSize:11,padding:'6px 14px'}}>Specs</button>
+              </div>
             </div>
           ))}
         </div>
@@ -512,40 +623,70 @@ function D4ContactPage() {
         <h1>Contact</h1>
       </div>
       <section className="d4-section">
-        <div className="d4-contact-grid">
-          <div className="d4-contact-info">
-            <h2>Wij staan klaar</h2>
-            {[
-              { label: 'Telefoon', val: SITE.phone, href: `tel:${SITE.phone.replace(/[^0-9+]/g,'')}` },
-              { label: 'E-mail', val: SITE.email, href: `mailto:${SITE.email}` },
-              { label: 'Adres', val: SITE.address },
-              { label: 'Openingstijden', val: 'Ma-Vr 09:00-20:00 | Za 09:00-13:00' },
-            ].map(d => (
-              <div key={d.label} className="d4-contact-detail">
-                <div className="d4-contact-label">{d.label}</div>
-                <div className="d4-contact-val">
-                  {d.href ? <a href={d.href}>{d.val}</a> : d.val}
-                </div>
-              </div>
-            ))}
-          </div>
-          <form onSubmit={e => e.preventDefault()}>
-            {[
-              { label: 'Naam', type: 'text', ph: 'Uw naam' },
-              { label: 'Telefoon', type: 'tel', ph: 'Uw telefoonnummer' },
-              { label: 'E-mail', type: 'email', ph: 'Uw e-mailadres' },
-            ].map(f => (
-              <div key={f.label} className="d4-form-group">
-                <label className="d4-form-label">{f.label}</label>
-                <input type={f.type} placeholder={f.ph} className="d4-form-control" />
-              </div>
-            ))}
-            <div className="d4-form-group">
-              <label className="d4-form-label">Bericht</label>
-              <textarea placeholder="Uw bericht..." className="d4-form-control" rows={4} />
+        {/* Opening hours + contact info grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, marginBottom: 40 }}>
+          {/* Opening hours card */}
+          <div style={{ background: '#0a1428', border: '1px solid rgba(0,200,255,0.12)', padding: 32 }}>
+            <div style={{ fontSize: 10, color: '#00C8FF', letterSpacing: '0.2em', marginBottom: 20 }}>// OPENINGSTIJDEN</div>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <tbody>
+                <tr style={{ borderBottom: '1px solid rgba(0,200,255,0.06)' }}>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: 'rgba(200,216,240,0.5)' }}>Maandag t/m vrijdag</td>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: '#00C8FF', textAlign: 'right', fontWeight: 600 }}>{OPENING_HOURS.weekdaysFrom} - {OPENING_HOURS.weekdaysTo}</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid rgba(0,200,255,0.06)' }}>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: 'rgba(200,216,240,0.5)' }}>Zaterdag</td>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: '#00C8FF', textAlign: 'right', fontWeight: 600 }}>{OPENING_HOURS.saturdayFrom} - {OPENING_HOURS.saturdayTo}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: 'rgba(200,216,240,0.5)' }}>Zondag</td>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: 'rgba(200,216,240,0.3)', textAlign: 'right' }}>{OPENING_HOURS.sundayClosed ? 'Gesloten' : 'Open'}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style={{ marginTop: 20, padding: '10px 14px', background: 'rgba(255,102,0,0.08)', border: '1px solid rgba(255,102,0,0.2)', fontSize: 12, color: '#FF6600', letterSpacing: '0.04em' }}>
+              Bel {OPENING_HOURS.callAheadMinutes} minuten van tevoren
             </div>
-            <button type="submit" className="d4-btn d4-btn-primary" style={{ width: '100%' }}>Verstuur bericht</button>
-          </form>
+          </div>
+
+          {/* Contact info card */}
+          <div style={{ background: '#0a1428', border: '1px solid rgba(0,200,255,0.12)', padding: 32 }}>
+            <div style={{ fontSize: 10, color: '#00C8FF', letterSpacing: '0.2em', marginBottom: 20 }}>// CONTACTGEGEVENS</div>
+            <div className="d4-contact-detail">
+              <div className="d4-contact-label">Telefoon</div>
+              <div className="d4-contact-val"><a href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`}>{SITE.phone}</a></div>
+            </div>
+            <div className="d4-contact-detail">
+              <div className="d4-contact-label">E-mail</div>
+              <div className="d4-contact-val"><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div>
+            </div>
+            <div className="d4-contact-detail">
+              <div className="d4-contact-label">Adres</div>
+              <div className="d4-contact-val">{SITE.address}</div>
+            </div>
+            <div style={{ marginTop: 16, padding: '10px 14px', background: 'rgba(0,200,255,0.04)', border: '1px solid rgba(0,200,255,0.1)', fontSize: 12, color: 'rgba(200,216,240,0.45)', letterSpacing: '0.04em' }}>
+              Alleen afhalen — geen verzending
+            </div>
+          </div>
+        </div>
+
+        {/* Google Maps embed */}
+        <div style={{ width: '100%', height: 300, border: '1px solid rgba(0,200,255,0.12)', marginBottom: 40, overflow: 'hidden' }}>
+          <iframe
+            src="https://maps.google.com/maps?q=Veerplaat+10,+3313+LJ+Dordrecht&output=embed"
+            width="100%"
+            height="300"
+            style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg)' }}
+            allowFullScreen
+            loading="lazy"
+            title="AircoStunt locatie"
+          />
+        </div>
+
+        {/* CTA buttons */}
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+          <a href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`} className="d4-btn d4-btn-primary">Bel nu</a>
+          <a href={`mailto:${SITE.email}`} className="d4-btn d4-btn-ghost">Stuur e-mail</a>
         </div>
       </section>
     </div>

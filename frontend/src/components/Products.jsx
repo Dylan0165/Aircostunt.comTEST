@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
-import { BRANDS } from '../data/staticData'
+import { BRANDS, SITE } from '../data/staticData'
 
 function ProductModal({ product, onClose }) {
   const priceLabel = formatPrice(product.priceFrom, product.priceTo)
@@ -23,61 +23,89 @@ function ProductModal({ product, onClose }) {
       aria-modal="true"
       aria-label={product.name}
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between p-5 border-b border-gray-100">
-          <div>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col" style={{ maxHeight: '90vh' }}>
+        {/* Fixed header */}
+        <div className="flex items-center gap-4 p-5 border-b border-gray-100 flex-shrink-0">
+          {product.image && (
+            <div className="w-16 h-16 bg-gray-50 rounded-xl flex items-center justify-center flex-shrink-0 border border-gray-100">
+              <img src={product.image} alt={product.name} className="max-w-[52px] max-h-[52px] object-contain" />
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
             {product.brandId && (
-              <span className="text-xs font-semibold text-accent uppercase tracking-wide">
+              <span className="text-xs font-bold text-accent uppercase tracking-widest">
                 {BRANDS.find((b) => b.id === product.brandId)?.name || ''}
               </span>
             )}
-            <h2 className="text-xl font-bold text-primary leading-snug">{product.name}</h2>
+            <h2 className="text-lg font-bold text-primary leading-snug truncate">{product.name}</h2>
+            <div className="flex items-baseline gap-2 mt-0.5">
+              {priceLabel && <span className="text-accent font-bold text-xl">{priceLabel}</span>}
+              <span className="text-xs text-gray-400">incl. BTW</span>
+            </div>
           </div>
-          <button
-            onClick={onClose}
-            className="ml-4 flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-            aria-label="Sluiten"
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-gray-500" aria-hidden="true">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-            </svg>
-          </button>
-        </div>
-
-        {/* Image */}
-        {product.image && (
-          <div className="bg-gray-50 flex items-center justify-center h-56 px-6">
-            <img
-              src={product.image}
-              alt={product.name}
-              className="max-h-48 max-w-full object-contain"
-            />
-          </div>
-        )}
-
-        {/* Body */}
-        <div className="p-5 space-y-4">
-          {/* Stock */}
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col items-end gap-2 flex-shrink-0">
+            <button
+              onClick={onClose}
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+              aria-label="Sluiten"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-gray-500" aria-hidden="true">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+              </svg>
+            </button>
             {product.inStock ? (
-              <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-sm font-semibold px-3 py-1 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
+              <span className="inline-flex items-center gap-1 bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block" />
                 Op voorraad
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1.5 bg-gray-100 text-gray-500 text-sm font-semibold px-3 py-1 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-gray-400 inline-block" />
+              <span className="inline-flex items-center gap-1 bg-gray-100 text-gray-400 text-xs font-bold px-2.5 py-1 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block" />
                 Uitverkocht
               </span>
             )}
           </div>
+        </div>
 
-          {/* Features */}
-          {product.features && product.features.length > 0 && (
+        {/* Scrollable body */}
+        <div className="spec-scroll overflow-y-auto flex-1 p-5 space-y-4">
+          {/* Full specs table */}
+          {product.specs && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-2">Kenmerken</h3>
-              <ul className="space-y-1.5">
+              <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Technische specificaties</div>
+              <div className="rounded-xl overflow-hidden border border-gray-100">
+                {[
+                  ['Koelcapaciteit', product.specs.koelcapaciteit, true],
+                  ['Verwarmingscapaciteit', product.specs.verwarmingscapaciteit, true],
+                  ['Energielabel koeling', product.specs.energielabelKoeling, true],
+                  ['Energielabel verwarming', product.specs.energielabelVerwarming, false],
+                  ['SEER', product.specs.seer, false],
+                  ['SCOP', product.specs.scop, false],
+                  ['Geluid binnen', product.specs.geluidBinnen, false],
+                  ['Geluid buiten', product.specs.geluidBuiten, false],
+                  ['Koudemiddel', product.specs.koudemiddel, false],
+                  ['Afmetingen binnenunit', product.specs.afmetingenBinnen, false],
+                  ['Gewicht binnenunit', product.specs.gewichtBinnen, false],
+                  ['WiFi', product.specs.wifi, true],
+                  ['Geschikt voor', product.specs.geschiktVoor, true],
+                  ['Stroomverbruik', product.specs.verbruikNominaal, false],
+                  product.specs.aantalBinnenunits && ['Aantal binnenunits', product.specs.aantalBinnenunits, false],
+                ].filter(Boolean).map(([label, value, highlight], i) => value && (
+                  <div key={i} className={`flex justify-between items-center px-4 py-3 text-sm gap-4 ${i % 2 === 0 ? 'bg-gray-50' : 'bg-white'}`}
+                    style={{ borderLeft: highlight ? '3px solid #FF6600' : '3px solid transparent' }}>
+                    <span className="text-gray-500 font-medium flex-shrink-0">{label}</span>
+                    <span className={`font-bold text-right ${highlight ? 'text-primary' : 'text-gray-700'}`}>{value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Features if no specs */}
+          {!product.specs && product.features && product.features.length > 0 && (
+            <div>
+              <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Kenmerken</div>
+              <ul className="space-y-2">
                 {product.features.map((feature, i) => (
                   <li key={i} className="flex items-start gap-2 text-gray-600 text-sm">
                     <CheckIcon />
@@ -87,22 +115,18 @@ function ProductModal({ product, onClose }) {
               </ul>
             </div>
           )}
+        </div>
 
-          {/* Price */}
-          {priceLabel && (
-            <div className="pt-3 border-t border-gray-100">
-              <span className="text-xs text-gray-400 uppercase tracking-wide">Prijs</span>
-              <p className="text-primary font-bold text-2xl">{priceLabel}</p>
-            </div>
-          )}
-
-          {/* CTA */}
+        {/* Fixed footer CTA */}
+        <div className="p-4 border-t border-gray-100 flex-shrink-0">
           <a
-            href="#contact"
-            onClick={onClose}
-            className="block w-full text-center bg-accent hover:bg-accent-dark text-white font-semibold py-3 rounded-xl transition-colors duration-200 mt-2"
+            href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`}
+            className="flex items-center justify-center gap-2 w-full text-center bg-accent hover:bg-accent-dark text-white font-bold py-3 rounded-xl transition-colors duration-200"
           >
-            Neem contact op
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+              <path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z" />
+            </svg>
+            Bel voor meer info
           </a>
         </div>
       </div>

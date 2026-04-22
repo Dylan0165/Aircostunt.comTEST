@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
-import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE } from '../../data/staticData'
+import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE, OPENING_HOURS } from '../../data/staticData'
 import WhatsAppButton from '../../components/WhatsAppButton'
 
 const BASE = '/design/5'
@@ -95,7 +95,7 @@ const CSS = `
 .d5-brands-inner { max-width: 1200px; margin: 0 auto; }
 .d5-brands-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(10,22,40,0.3); text-align: center; margin-bottom: 36px; }
 .d5-brands-logos { display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; }
-.d5-brand-logo { height: 38px; object-fit: contain; filter: grayscale(1) opacity(0.45); transition: filter 0.3s; }
+.d5-brand-logo { height: 38px; object-fit: contain; filter: grayscale(1) opacity(0.45); transition: filter 0.3s; mix-blend-mode: multiply; }
 .d5-brand-logo:hover { filter: grayscale(0) opacity(1); }
 .d5-brand-text { font-size: 13px; font-weight: 600; color: rgba(10,22,40,0.3); }
 
@@ -117,7 +117,7 @@ const CSS = `
 .d5-brands-pg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 .d5-brand-pg-card { background: #fff; border: 1px solid rgba(0,51,102,0.1); border-radius: 20px; padding: 36px; transition: all 0.25s; }
 .d5-brand-pg-card:hover { border-color: rgba(0,51,102,0.25); box-shadow: 0 12px 32px rgba(0,0,0,0.08); transform: translateY(-3px); }
-.d5-brand-pg-logo { height: 44px; object-fit: contain; margin-bottom: 24px; }
+.d5-brand-pg-logo { height: 44px; object-fit: contain; margin-bottom: 24px; mix-blend-mode: multiply; }
 .d5-brand-pg-name { font-size: 18px; font-weight: 800; color: #003366; margin-bottom: 10px; }
 .d5-brand-pg-desc { font-size: 14px; color: rgba(10,22,40,0.5); line-height: 1.7; }
 
@@ -203,6 +203,42 @@ textarea.d5-form-control { resize: vertical; min-height: 100px; }
   .d5-cta-section { padding: 64px 24px; }
   .d5-page-hero { padding: 108px 24px 56px; }
 }
+@media (max-width: 768px) {
+  .d5-nav { padding: 0 16px; height: 60px; }
+  .d5-nav-logo { font-size: 17px; }
+  .d5-nav-links, .d5-nav-cta { display: none; }
+  .d5-hamburger { display: flex; }
+  .d5-mobile-menu { top: 60px; }
+  .d5-hero { padding: 72px 16px 48px; }
+  .d5-hero-inner { grid-template-columns: 1fr; gap: 0; }
+  .d5-hero-stats { display: none; }
+  .d5-hero-actions { flex-direction: column; gap: 10px; }
+  .d5-hero-actions .d5-btn { width: 100%; justify-content: center; }
+  .d5-section { padding: 40px 16px; }
+  .d5-products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+  .d5-reviews-grid { grid-template-columns: 1fr; }
+  .d5-brands-logos { gap: 20px; }
+  .d5-brands-section { padding: 36px 16px; }
+  .d5-reviews-section { padding: 48px 16px; }
+  .d5-cta-section { padding: 48px 16px; }
+  .d5-about-grid { grid-template-columns: 1fr; gap: 32px; }
+  .d5-contact-grid { grid-template-columns: 1fr; gap: 32px; }
+  .d5-footer-top { grid-template-columns: 1fr; gap: 24px; }
+  .d5-footer { padding: 40px 16px 20px; }
+  .d5-page-hero { padding: 88px 16px 40px; }
+  .d5-acc-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .d5-brands-pg-grid { grid-template-columns: 1fr; }
+  .d5-stats-grid { grid-template-columns: 1fr 1fr; }
+  .d5-usps-inner { padding: 0 16px; }
+}
+@media (max-width: 480px) {
+  .d5-products-grid { grid-template-columns: 1fr; }
+  .d5-acc-grid { grid-template-columns: 1fr; }
+  .d5-brands-logos { flex-direction: column; align-items: center; gap: 16px; }
+  .d5-section { padding: 32px 14px; }
+  .d5-hero { padding: 64px 14px 40px; }
+  .d5-cta-section { padding: 40px 14px; }
+}
 @keyframes d5-fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes d5-fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .d5-hero-tag { animation: d5-fadeUp 0.5s ease both; }
@@ -214,6 +250,9 @@ textarea.d5-form-control { resize: vertical; min-height: 100px; }
 .d5-prod-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,51,102,0.15); }
 .d5-brand-card { transition: transform 0.2s, box-shadow 0.2s; }
 .d5-brand-card:hover { transform: translateY(-3px); }
+.d5-spec-body::-webkit-scrollbar { width: 5px; }
+.d5-spec-body::-webkit-scrollbar-track { background: transparent; }
+.d5-spec-body::-webkit-scrollbar-thumb { background: #FF6600; border-radius: 10px; }
 `
 
 function D5Header() {
@@ -229,10 +268,8 @@ function D5Header() {
     <>
       <nav className="d5-nav">
         <NavLink to={`${BASE}/`} className="d5-nav-logo">
-          <div className="d5-nav-logo-icon">
-            <svg viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-          </div>
-          Airco<span>Stunt</span>
+          <img src="/logoairco.png" alt="AircoStunt" style={{ height: 34, width: 'auto' }} onError={e => { e.currentTarget.style.display='none'; e.currentTarget.nextSibling.style.display='inline' }} />
+          <span style={{ display: 'none' }}>Airco<span style={{ color: '#FF6600' }}>Stunt</span></span>
         </NavLink>
         <div className="d5-nav-links">
           {links.map(l => (
@@ -430,6 +467,31 @@ function D5HomePage() {
         </div>
       </div>
 
+      {/* WiFi feature section */}
+      <section style={{ background: '#f0f4f8', padding: '80px 48px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ background: '#fff', borderRadius: 24, padding: 40, boxShadow: '0 8px 40px rgba(0,51,102,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src="/wifi.png" alt="WiFi module" style={{ maxWidth: 200, maxHeight: 200, objectFit: 'contain' }} />
+            </div>
+          </div>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', color: '#FF6600', textTransform: 'uppercase', marginBottom: 12 }}>Standaard inbegrepen</div>
+            <h2 style={{ fontFamily: 'Poppins,sans-serif', fontSize: 'clamp(26px,3.5vw,40px)', fontWeight: 800, color: '#003366', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 16 }}>
+              Gratis WiFi-module bij elke airco
+            </h2>
+            <p style={{ fontSize: 16, color: '#64748b', lineHeight: 1.75, marginBottom: 24 }}>
+              Bedien uw airco gemakkelijk via de smartphone-app. Elke split-unit die wij leveren is voorzien van een ingebouwde wifi-module zonder meerkosten.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {['MyDaikin', 'MELCloud', 'SmartThings', 'LG ThinQ'].map(app => (
+                <span key={app} style={{ background: '#fff', border: '1.5px solid #003366', color: '#003366', fontSize: 12, padding: '6px 16px', borderRadius: 50, fontWeight: 600 }}>{app}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="d5-cta-section">
         <h2>Klaar voor uw nieuwe airco?</h2>
@@ -469,12 +531,49 @@ function D5MerkenPage() {
   )
 }
 
+function D5SpecModal({ product, onClose }) {
+  useEffect(() => {
+    const onKey = e => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
+  }, [onClose])
+  const s = product.specs || {}
+  const rows = [['Koelcapaciteit',s.koelcapaciteit],['Verwarmingscapaciteit',s.verwarmingscapaciteit],['Energielabel koeling',s.energielabelKoeling],['Energielabel verwarming',s.energielabelVerwarming],['SEER',s.seer],['SCOP',s.scop],['Geluid (binnen)',s.geluidBinnen],['Geluid (buiten)',s.geluidBuiten],['Koudemiddel',s.koudemiddel],['Afmetingen binnenunit',s.afmetingenBinnen],['Gewicht binnenunit',s.gewichtBinnen],['WiFi',s.wifi],['Geschikt voor',s.geschiktVoor],['Stroomverbruik',s.verbruikNominaal]].filter(([,v])=>v)
+  return (
+    <div onClick={e=>e.target===e.currentTarget&&onClose()} style={{position:'fixed',inset:0,zIndex:9000,background:'rgba(0,30,70,0.7)',backdropFilter:'blur(4px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16}}>
+      <div className="d5-spec-body" style={{background:'#fff',borderRadius:16,width:'100%',maxWidth:540,maxHeight:'90vh',overflowY:'auto',boxShadow:'0 24px 80px rgba(0,51,102,0.25)',scrollbarWidth:'thin',scrollbarColor:'#FF6600 transparent'}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'20px 24px',borderBottom:'1px solid #f0f0f0'}}>
+          <div><div style={{fontSize:11,color:'#FF6600',fontWeight:700,letterSpacing:'0.1em',marginBottom:4,textTransform:'uppercase'}}>{BRANDS.find(b=>b.id===product.brandId)?.name}</div><div style={{fontSize:20,fontWeight:800,color:'#003366'}}>{product.name}</div></div>
+          <button onClick={onClose} style={{background:'#f5f5f5',border:'none',width:36,height:36,borderRadius:'50%',cursor:'pointer',fontSize:20,display:'flex',alignItems:'center',justifyContent:'center',color:'#666'}}>×</button>
+        </div>
+        {product.image&&<div style={{background:'#f8f9fa',display:'flex',alignItems:'center',justifyContent:'center',height:180}}><img src={product.image} alt={product.name} style={{maxHeight:140,maxWidth:'100%',objectFit:'contain'}}/></div>}
+        <div style={{padding:'20px 24px'}}>
+          <div style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',color:'#999',marginBottom:12,textTransform:'uppercase'}}>Technische specificaties</div>
+          {rows.map(([label,value],i)=>(
+            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 16px',borderBottom:'1px solid #f0f0f0',fontSize:14,background:i%2===0?'#f8faff':'transparent'}}>
+              <span style={{color:'#888',fontWeight:600}}>{label}</span>
+              <span style={{color:'#003366',fontWeight:700,textAlign:'right',marginLeft:16,maxWidth:'55%'}}>{value}</span>
+            </div>
+          ))}
+          <div style={{marginTop:20,background:'#f8f9fa',borderRadius:12,padding:'16px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:12}}>
+            <div><div style={{fontSize:11,color:'#999',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase'}}>Prijs</div><div style={{fontSize:28,fontWeight:800,color:'#003366'}}>€{product.priceFrom} <span style={{fontSize:13,color:'#999',fontWeight:500}}>incl. BTW</span></div></div>
+            <a href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`} style={{background:'#FF6600',color:'#fff',padding:'12px 24px',borderRadius:50,fontSize:13,fontWeight:700,textDecoration:'none',whiteSpace:'nowrap'}}>Bel voor info</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function D5ProductenPage() {
   const [active, setActive] = useState('all')
+  const [sel, setSel] = useState(null)
   const brandIds = ['all', ...BRANDS.map(b => b.id)]
   const filtered = active === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.brandId === active)
   return (
     <div>
+      {sel && <D5SpecModal product={sel} onClose={() => setSel(null)} />}
       <div className="d5-page-hero">
         <div className="d5-page-hero-inner">
           <div className="d5-page-hero-eyebrow">Ons assortiment</div>
@@ -509,6 +608,7 @@ function D5ProductenPage() {
                 </ul>
                 <div className="d5-product-card-footer">
                   <div className="d5-product-price"><small>v.a. </small>&euro;{p.priceFrom}</div>
+                  <button onClick={() => setSel(p)} style={{background:'none',border:'1px solid #003366',color:'#003366',padding:'6px 16px',borderRadius:50,fontSize:12,fontWeight:600,cursor:'pointer'}}>Specs</button>
                 </div>
               </div>
             </div>
@@ -597,50 +697,85 @@ function D5ContactPage() {
         </div>
       </div>
       <section className="d5-section">
-        <div className="d5-contact-grid">
-          <div className="d5-contact-info">
-            <h2>Wij staan voor u klaar</h2>
-            {[
-              { label: 'Telefoon', val: SITE.phone, href: `tel:${SITE.phone.replace(/[^0-9+]/g,'')}`, icon: <path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/> },
-              { label: 'E-mail', val: SITE.email, href: `mailto:${SITE.email}`, icon: <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/> },
-              { label: 'Adres', val: SITE.address, icon: <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/> },
-              { label: 'Openingstijden', val: 'Ma-Vr 09:00-20:00 | Za 09:00-13:00', icon: <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/> },
-            ].map(d => (
-              <div key={d.label} className="d5-contact-detail">
-                <div className="d5-contact-icon">
-                  <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 18, height: 18, color: '#FF6600' }}>{d.icon}</svg>
-                </div>
-                <div>
-                  <div className="d5-contact-label">{d.label}</div>
-                  <div className="d5-contact-val">
-                    {d.href ? <a href={d.href}>{d.val}</a> : d.val}
-                  </div>
-                </div>
-              </div>
-            ))}
+        {/* Opening hours + contact info grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, marginBottom: 40 }}>
+          {/* Opening hours card */}
+          <div style={{ background: '#fff', border: '1px solid rgba(0,51,102,0.1)', borderRadius: 20, padding: 32, boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#FF6600', marginBottom: 20 }}>Openingstijden</div>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <tbody>
+                <tr style={{ borderBottom: '1px solid rgba(0,51,102,0.06)' }}>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: 'rgba(10,22,40,0.55)', fontWeight: 500 }}>Maandag t/m vrijdag</td>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: '#003366', textAlign: 'right', fontWeight: 700 }}>{OPENING_HOURS.weekdaysFrom} - {OPENING_HOURS.weekdaysTo}</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid rgba(0,51,102,0.06)' }}>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: 'rgba(10,22,40,0.55)', fontWeight: 500 }}>Zaterdag</td>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: '#003366', textAlign: 'right', fontWeight: 700 }}>{OPENING_HOURS.saturdayFrom} - {OPENING_HOURS.saturdayTo}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: 'rgba(10,22,40,0.55)', fontWeight: 500 }}>Zondag</td>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: 'rgba(10,22,40,0.3)', textAlign: 'right', fontWeight: 600 }}>{OPENING_HOURS.sundayClosed ? 'Gesloten' : 'Open'}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style={{ marginTop: 20, padding: '10px 14px', background: 'rgba(255,102,0,0.08)', borderRadius: 10, fontSize: 13, color: '#FF6600', fontWeight: 600 }}>
+              Bel {OPENING_HOURS.callAheadMinutes} minuten van tevoren
+            </div>
           </div>
-          <div className="d5-form-card">
-            <h3 style={{ fontSize: 20, fontWeight: 800, color: '#003366', marginBottom: 24 }}>Stuur een bericht</h3>
-            <form onSubmit={e => e.preventDefault()}>
-              {[
-                { label: 'Naam', type: 'text', ph: 'Uw naam' },
-                { label: 'Telefoon', type: 'tel', ph: 'Uw telefoonnummer' },
-                { label: 'E-mail', type: 'email', ph: 'Uw e-mailadres' },
-              ].map(f => (
-                <div key={f.label} className="d5-form-group">
-                  <label className="d5-form-label">{f.label}</label>
-                  <input type={f.type} placeholder={f.ph} className="d5-form-control" />
-                </div>
-              ))}
-              <div className="d5-form-group">
-                <label className="d5-form-label">Bericht</label>
-                <textarea placeholder="Uw bericht of vraag..." className="d5-form-control" rows={4} />
+
+          {/* Contact info card */}
+          <div style={{ background: '#fff', border: '1px solid rgba(0,51,102,0.1)', borderRadius: 20, padding: 32, boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#FF6600', marginBottom: 20 }}>Contactgegevens</div>
+            <div className="d5-contact-detail">
+              <div className="d5-contact-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 18, height: 18, color: '#FF6600' }}><path d="M6.62 10.79a15.053 15.053 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg>
               </div>
-              <button type="submit" className="d5-btn d5-btn-orange" style={{ width: '100%', justifyContent: 'center' }}>
-                Verstuur bericht
-              </button>
-            </form>
+              <div>
+                <div className="d5-contact-label">Telefoon</div>
+                <div className="d5-contact-val"><a href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`}>{SITE.phone}</a></div>
+              </div>
+            </div>
+            <div className="d5-contact-detail">
+              <div className="d5-contact-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 18, height: 18, color: '#FF6600' }}><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              </div>
+              <div>
+                <div className="d5-contact-label">E-mail</div>
+                <div className="d5-contact-val"><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div>
+              </div>
+            </div>
+            <div className="d5-contact-detail">
+              <div className="d5-contact-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: 18, height: 18, color: '#FF6600' }}><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              </div>
+              <div>
+                <div className="d5-contact-label">Adres</div>
+                <div className="d5-contact-val">{SITE.address}</div>
+              </div>
+            </div>
+            <div style={{ marginTop: 16, padding: '10px 14px', background: '#f8faff', borderRadius: 10, fontSize: 13, color: 'rgba(10,22,40,0.5)', fontWeight: 500 }}>
+              Alleen afhalen — geen verzending
+            </div>
           </div>
+        </div>
+
+        {/* Google Maps embed */}
+        <div style={{ width: '100%', height: 300, borderRadius: 16, overflow: 'hidden', marginBottom: 40, border: '1px solid rgba(0,51,102,0.1)' }}>
+          <iframe
+            src="https://maps.google.com/maps?q=Veerplaat+10,+3313+LJ+Dordrecht&output=embed"
+            width="100%"
+            height="300"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            title="AircoStunt locatie"
+          />
+        </div>
+
+        {/* CTA buttons */}
+        <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
+          <a href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`} className="d5-btn d5-btn-orange">Bel nu</a>
+          <a href={`mailto:${SITE.email}`} className="d5-btn d5-btn-navy">Stuur e-mail</a>
         </div>
       </section>
     </div>

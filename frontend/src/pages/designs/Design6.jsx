@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
-import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE } from '../../data/staticData'
+import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE, OPENING_HOURS } from '../../data/staticData'
 import WhatsAppButton from '../../components/WhatsAppButton'
 
 const BASE = '/design/6'
@@ -55,7 +55,7 @@ const CSS = `
 .d6-brands-strip-inner { max-width: 1200px; margin: 0 auto; }
 .d6-brands-label { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(30,45,69,0.3); text-align: center; margin-bottom: 24px; }
 .d6-brands-logos { display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; }
-.d6-brand-logo { height: 36px; object-fit: contain; filter: grayscale(1) opacity(0.4); transition: filter 0.3s; }
+.d6-brand-logo { height: 36px; object-fit: contain; filter: grayscale(1) opacity(0.4); transition: filter 0.3s; mix-blend-mode: multiply; }
 .d6-brand-logo:hover { filter: grayscale(0) opacity(1); }
 .d6-brand-text { font-size: 14px; font-weight: 700; color: rgba(30,45,69,0.3); }
 
@@ -98,7 +98,7 @@ const CSS = `
 .d6-brands-pg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 .d6-brand-pg-card { background: #fff; border-radius: 24px; padding: 36px; border: 1px solid rgba(255,107,44,0.1); box-shadow: 0 4px 16px rgba(30,45,69,0.05); transition: all 0.25s; }
 .d6-brand-pg-card:hover { box-shadow: 0 12px 32px rgba(30,45,69,0.1); transform: translateY(-3px); }
-.d6-brand-pg-logo { height: 44px; object-fit: contain; margin-bottom: 20px; }
+.d6-brand-pg-logo { height: 44px; object-fit: contain; margin-bottom: 20px; mix-blend-mode: multiply; }
 .d6-brand-pg-name { font-size: 20px; font-weight: 800; color: #1e2d45; margin-bottom: 10px; }
 .d6-brand-pg-desc { font-size: 14px; color: rgba(30,45,69,0.5); line-height: 1.7; }
 .d6-brand-pg-dot { width: 32px; height: 4px; background: #FF6B2C; border-radius: 4px; margin-bottom: 16px; }
@@ -179,6 +179,40 @@ textarea.d6-form-control { resize: vertical; min-height: 100px; }
   .d6-cta-section { padding: 64px 24px; }
   .d6-page-hero { padding: 108px 24px 48px; }
 }
+@media (max-width: 768px) {
+  .d6-nav { padding: 0 16px; height: 60px; }
+  .d6-nav-logo { font-size: 18px; }
+  .d6-nav-links, .d6-nav-cta { display: none; }
+  .d6-hamburger { display: flex; }
+  .d6-mobile-menu { top: 60px; }
+  .d6-hero { padding: 80px 16px 48px; grid-template-columns: 1fr; min-height: auto; }
+  .d6-hero-visual { display: none; }
+  .d6-hero-actions { flex-direction: column; gap: 10px; }
+  .d6-hero-actions .d6-btn { width: 100%; justify-content: center; }
+  .d6-section { padding: 40px 16px; }
+  .d6-products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+  .d6-reviews-grid { grid-template-columns: 1fr; }
+  .d6-brands-logos { gap: 20px; }
+  .d6-brands-strip { padding: 28px 16px; }
+  .d6-reviews-section { padding: 48px 16px; }
+  .d6-cta-section { padding: 48px 16px; }
+  .d6-about-grid { grid-template-columns: 1fr; gap: 32px; }
+  .d6-contact-grid { grid-template-columns: 1fr; gap: 32px; }
+  .d6-footer-top { grid-template-columns: 1fr; gap: 24px; }
+  .d6-footer { padding: 40px 16px 20px; }
+  .d6-page-hero { padding: 88px 16px 40px; }
+  .d6-acc-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .d6-brands-pg-grid { grid-template-columns: 1fr; }
+  .d6-stats-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .d6-products-grid { grid-template-columns: 1fr; }
+  .d6-acc-grid { grid-template-columns: 1fr; }
+  .d6-brands-logos { flex-direction: column; align-items: center; gap: 16px; }
+  .d6-section { padding: 32px 14px; }
+  .d6-hero { padding: 72px 14px 40px; }
+  .d6-cta-section { padding: 40px 14px; }
+}
 @keyframes d6-fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes d6-fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .d6-hero-text > * { animation: d6-fadeUp 0.65s ease both; }
@@ -190,6 +224,9 @@ textarea.d6-form-control { resize: vertical; min-height: 100px; }
 .d6-prod-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(255,107,44,0.15); }
 .d6-brand-pill { transition: transform 0.2s, background 0.2s; }
 .d6-brand-pill:hover { transform: scale(1.04); }
+.d6-spec-body::-webkit-scrollbar { width: 5px; }
+.d6-spec-body::-webkit-scrollbar-track { background: transparent; }
+.d6-spec-body::-webkit-scrollbar-thumb { background: #FF6600; border-radius: 10px; }
 `
 
 function D6Header() {
@@ -205,7 +242,8 @@ function D6Header() {
     <>
       <nav className="d6-nav">
         <NavLink to={`${BASE}/`} className="d6-nav-logo">
-          Airco<span>Stunt</span>
+          <img src="/logoairco.png" alt="AircoStunt" style={{ height: 34, width: 'auto' }} onError={e => { e.currentTarget.style.display='none'; e.currentTarget.nextSibling.style.display='inline' }} />
+          <span style={{ display: 'none' }}>Airco<span style={{ color: '#FF6B2C' }}>Stunt</span></span>
         </NavLink>
         <div className="d6-nav-links">
           {links.map(l => (
@@ -363,6 +401,31 @@ function D6HomePage() {
         </div>
       </div>
 
+      {/* WiFi feature section */}
+      <section style={{ background: '#fff7f3', padding: '80px 48px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, alignItems: 'center' }}>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: '#FF6B2C', textTransform: 'uppercase', marginBottom: 12 }}>Standaard inbegrepen</div>
+            <h2 style={{ fontFamily: 'Nunito,sans-serif', fontSize: 'clamp(24px,3.5vw,38px)', fontWeight: 800, color: '#1e2d45', lineHeight: 1.15, marginBottom: 16 }}>
+              Gratis WiFi-module bij elke airco
+            </h2>
+            <p style={{ fontSize: 16, color: '#6b7c8d', lineHeight: 1.75, marginBottom: 24 }}>
+              Bedien uw airco via de app op uw telefoon. Onze airco's zijn voorzien van een ingebouwde wifi-module, zodat u altijd de controle heeft.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {['MyDaikin', 'MELCloud', 'SmartThings', 'LG ThinQ'].map(app => (
+                <span key={app} style={{ background: '#fff', border: '1.5px solid #FF6B2C', color: '#FF6B2C', fontSize: 12, padding: '6px 16px', borderRadius: 50, fontWeight: 700 }}>{app}</span>
+              ))}
+            </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ background: '#fff', borderRadius: 24, padding: 40, boxShadow: '0 8px 40px rgba(0,51,102,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src="/wifi.png" alt="WiFi module" style={{ maxWidth: 200, maxHeight: 200, objectFit: 'contain' }} />
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="d6-cta-section">
         <div className="d6-cta-inner">
           <h2>Klaar voor een frisse zomer?</h2>
@@ -404,12 +467,49 @@ function D6MerkenPage() {
   )
 }
 
+function D6SpecModal({ product, onClose }) {
+  useEffect(() => {
+    const onKey = e => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    document.body.style.overflow = 'hidden'
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = '' }
+  }, [onClose])
+  const s = product.specs || {}
+  const rows = [['Koelcapaciteit',s.koelcapaciteit],['Verwarmingscapaciteit',s.verwarmingscapaciteit],['Energielabel koeling',s.energielabelKoeling],['Energielabel verwarming',s.energielabelVerwarming],['SEER',s.seer],['SCOP',s.scop],['Geluid (binnen)',s.geluidBinnen],['Geluid (buiten)',s.geluidBuiten],['Koudemiddel',s.koudemiddel],['Afmetingen binnenunit',s.afmetingenBinnen],['Gewicht binnenunit',s.gewichtBinnen],['WiFi',s.wifi],['Geschikt voor',s.geschiktVoor],['Stroomverbruik',s.verbruikNominaal]].filter(([,v])=>v)
+  return (
+    <div onClick={e=>e.target===e.currentTarget&&onClose()} style={{position:'fixed',inset:0,zIndex:9000,background:'rgba(0,0,0,0.5)',backdropFilter:'blur(4px)',display:'flex',alignItems:'center',justifyContent:'center',padding:16}}>
+      <div className="d6-spec-body" style={{background:'#fff',borderRadius:20,width:'100%',maxWidth:540,maxHeight:'90vh',overflowY:'auto',boxShadow:'0 32px 80px rgba(255,107,44,0.15)',scrollbarWidth:'thin',scrollbarColor:'#FF6600 transparent'}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'20px 24px',borderBottom:'1px solid #fce8df'}}>
+          <div><div style={{fontSize:11,color:'#FF6B2C',fontWeight:700,letterSpacing:'0.1em',marginBottom:4,textTransform:'uppercase'}}>{BRANDS.find(b=>b.id===product.brandId)?.name}</div><div style={{fontSize:20,fontWeight:800,color:'#1e2d45'}}>{product.name}</div></div>
+          <button onClick={onClose} style={{background:'#fff5f0',border:'none',width:36,height:36,borderRadius:'50%',cursor:'pointer',fontSize:20,color:'#FF6B2C'}}>×</button>
+        </div>
+        {product.image&&<div style={{background:'#fdf5f0',display:'flex',alignItems:'center',justifyContent:'center',height:180}}><img src={product.image} alt={product.name} style={{maxHeight:140,maxWidth:'100%',objectFit:'contain'}}/></div>}
+        <div style={{padding:'20px 24px'}}>
+          <div style={{fontSize:11,fontWeight:700,letterSpacing:'0.1em',color:'#aaa',marginBottom:12,textTransform:'uppercase'}}>Technische specificaties</div>
+          {rows.map(([label,value],i)=>(
+            <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 16px',borderBottom:'1px solid #f0e8e0',fontSize:14,background:i%2===0?'#fff8f5':'transparent'}}>
+              <span style={{color:'#aaa',fontWeight:600}}>{label}</span>
+              <span style={{color:'#FF6B2C',fontWeight:700,textAlign:'right',marginLeft:16,maxWidth:'55%'}}>{value}</span>
+            </div>
+          ))}
+          <div style={{marginTop:20,background:'#fff5f0',borderRadius:16,padding:'16px 20px',display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:12}}>
+            <div><div style={{fontSize:11,color:'#aaa',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase'}}>Prijs</div><div style={{fontSize:26,fontWeight:800,color:'#1e2d45'}}>€{product.priceFrom} <span style={{fontSize:13,color:'#aaa',fontWeight:500}}>incl. BTW</span></div></div>
+            <a href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`} style={{background:'#FF6B2C',color:'#fff',padding:'12px 24px',borderRadius:50,fontSize:13,fontWeight:700,textDecoration:'none',whiteSpace:'nowrap'}}>Bel voor info</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function D6ProductenPage() {
   const [active, setActive] = useState('all')
+  const [sel, setSel] = useState(null)
   const brandIds = ['all', ...BRANDS.map(b => b.id)]
   const filtered = active === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.brandId === active)
   return (
     <div>
+      {sel && <D6SpecModal product={sel} onClose={() => setSel(null)} />}
       <div className="d6-page-hero">
         <div className="d6-page-hero-inner">
           <div className="d6-page-hero-eyebrow">Ons assortiment</div>
@@ -442,7 +542,10 @@ function D6ProductenPage() {
                 <ul className="d6-product-feats">
                   {p.features.slice(0, 3).map((f, i) => <li key={i}>{f}</li>)}
                 </ul>
-                <div className="d6-product-price"><small>v.a. </small>&euro;{p.priceFrom}</div>
+                <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginTop:10}}>
+                  <div className="d6-product-price"><small>v.a. </small>&euro;{p.priceFrom}</div>
+                  <button onClick={() => setSel(p)} style={{background:'none',border:'1.5px solid #FF6B2C',color:'#FF6B2C',padding:'5px 14px',borderRadius:50,fontSize:12,fontWeight:700,cursor:'pointer'}}>Specs</button>
+                </div>
               </div>
             </div>
           ))}
@@ -528,48 +631,79 @@ function D6ContactPage() {
         </div>
       </div>
       <section className="d6-section">
-        <div className="d6-contact-grid">
-          <div className="d6-contact-info">
-            <h2>Wij helpen u graag!</h2>
-            {[
-              { emoji: '📞', label: 'Telefoon', val: SITE.phone, href: `tel:${SITE.phone.replace(/[^0-9+]/g,'')}` },
-              { emoji: '✉️', label: 'E-mail', val: SITE.email, href: `mailto:${SITE.email}` },
-              { emoji: '📍', label: 'Adres', val: SITE.address },
-              { emoji: '🕐', label: 'Openingstijden', val: 'Ma-Vr 09:00-20:00 | Za 09:00-13:00' },
-            ].map(d => (
-              <div key={d.label} className="d6-contact-detail">
-                <div className="d6-contact-icon">{d.emoji}</div>
-                <div>
-                  <div className="d6-contact-label">{d.label}</div>
-                  <div className="d6-contact-val">
-                    {d.href ? <a href={d.href}>{d.val}</a> : d.val}
-                  </div>
-                </div>
-              </div>
-            ))}
+        {/* Opening hours + contact info grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, marginBottom: 40 }}>
+          {/* Opening hours card */}
+          <div style={{ background: '#fff', borderRadius: 24, padding: 32, boxShadow: '0 4px 20px rgba(30,45,69,0.06)', border: '1px solid rgba(255,107,44,0.1)' }}>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#FF6B2C', marginBottom: 20 }}>Openingstijden</div>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <tbody>
+                <tr style={{ borderBottom: '1px solid rgba(255,107,44,0.08)' }}>
+                  <td style={{ padding: '10px 0', fontSize: 14, fontWeight: 600, color: 'rgba(30,45,69,0.6)' }}>Maandag t/m vrijdag</td>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: '#FF6B2C', textAlign: 'right', fontWeight: 700 }}>{OPENING_HOURS.weekdaysFrom} - {OPENING_HOURS.weekdaysTo}</td>
+                </tr>
+                <tr style={{ borderBottom: '1px solid rgba(255,107,44,0.08)' }}>
+                  <td style={{ padding: '10px 0', fontSize: 14, fontWeight: 600, color: 'rgba(30,45,69,0.6)' }}>Zaterdag</td>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: '#FF6B2C', textAlign: 'right', fontWeight: 700 }}>{OPENING_HOURS.saturdayFrom} - {OPENING_HOURS.saturdayTo}</td>
+                </tr>
+                <tr>
+                  <td style={{ padding: '10px 0', fontSize: 14, fontWeight: 600, color: 'rgba(30,45,69,0.6)' }}>Zondag</td>
+                  <td style={{ padding: '10px 0', fontSize: 14, color: 'rgba(30,45,69,0.3)', textAlign: 'right', fontWeight: 600 }}>{OPENING_HOURS.sundayClosed ? 'Gesloten' : 'Open'}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style={{ marginTop: 20, padding: '10px 16px', background: 'rgba(255,107,44,0.08)', borderRadius: 12, fontSize: 13, color: '#FF6B2C', fontWeight: 700 }}>
+              Bel {OPENING_HOURS.callAheadMinutes} minuten van tevoren
+            </div>
           </div>
-          <div className="d6-form-card">
-            <h3 style={{ fontSize: 20, fontWeight: 800, color: '#1e2d45', marginBottom: 24 }}>Stuur ons een bericht</h3>
-            <form onSubmit={e => e.preventDefault()}>
-              {[
-                { label: 'Naam', type: 'text', ph: 'Uw naam' },
-                { label: 'Telefoon', type: 'tel', ph: 'Uw telefoonnummer' },
-                { label: 'E-mail', type: 'email', ph: 'Uw e-mailadres' },
-              ].map(f => (
-                <div key={f.label} className="d6-form-group">
-                  <label className="d6-form-label">{f.label}</label>
-                  <input type={f.type} placeholder={f.ph} className="d6-form-control" />
-                </div>
-              ))}
-              <div className="d6-form-group">
-                <label className="d6-form-label">Bericht</label>
-                <textarea placeholder="Uw bericht of vraag..." className="d6-form-control" rows={4} />
+
+          {/* Contact info card */}
+          <div style={{ background: '#fff', borderRadius: 24, padding: 32, boxShadow: '0 4px 20px rgba(30,45,69,0.06)', border: '1px solid rgba(255,107,44,0.1)' }}>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#FF6B2C', marginBottom: 20 }}>Contactgegevens</div>
+            <div className="d6-contact-detail">
+              <div className="d6-contact-icon">📞</div>
+              <div>
+                <div className="d6-contact-label">Telefoon</div>
+                <div className="d6-contact-val"><a href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`}>{SITE.phone}</a></div>
               </div>
-              <button type="submit" className="d6-btn d6-btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                Verstuur bericht
-              </button>
-            </form>
+            </div>
+            <div className="d6-contact-detail">
+              <div className="d6-contact-icon">✉️</div>
+              <div>
+                <div className="d6-contact-label">E-mail</div>
+                <div className="d6-contact-val"><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div>
+              </div>
+            </div>
+            <div className="d6-contact-detail">
+              <div className="d6-contact-icon">📍</div>
+              <div>
+                <div className="d6-contact-label">Adres</div>
+                <div className="d6-contact-val">{SITE.address}</div>
+              </div>
+            </div>
+            <div style={{ marginTop: 16, padding: '10px 16px', background: '#FFF8F2', borderRadius: 12, fontSize: 13, color: 'rgba(30,45,69,0.5)', fontWeight: 600 }}>
+              Alleen afhalen — geen verzending
+            </div>
           </div>
+        </div>
+
+        {/* Google Maps embed */}
+        <div style={{ width: '100%', height: 300, borderRadius: 20, overflow: 'hidden', marginBottom: 40, border: '1px solid rgba(255,107,44,0.1)' }}>
+          <iframe
+            src="https://maps.google.com/maps?q=Veerplaat+10,+3313+LJ+Dordrecht&output=embed"
+            width="100%"
+            height="300"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            title="AircoStunt locatie"
+          />
+        </div>
+
+        {/* CTA buttons */}
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <a href={`tel:${SITE.phone.replace(/[^0-9+]/g,'')}`} className="d6-btn d6-btn-primary">Bel nu</a>
+          <a href={`mailto:${SITE.email}`} className="d6-btn d6-btn-secondary">Stuur e-mail</a>
         </div>
       </section>
     </div>
