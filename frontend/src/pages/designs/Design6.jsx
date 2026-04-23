@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
 import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE, OPENING_HOURS } from '../../data/staticData'
 import WhatsAppButton from '../../components/WhatsAppButton'
@@ -7,7 +7,7 @@ const BASE = '/design/6'
 
 const CSS = `
 .d6 *, .d6 *::before, .d6 *::after { box-sizing: border-box; margin: 0; padding: 0; }
-.d6 { font-family: 'Nunito', 'Segoe UI', sans-serif; font-weight: 400; background: #FFF8F2; color: #1e2d45; line-height: 1.65; min-height: 100vh; }
+.d6 { font-family: 'Nunito', 'Segoe UI', sans-serif; font-weight: 400; background: #FFF8F2; color: #1e2d45; line-height: 1.65; min-height: 100vh; overflow-x: hidden; }
 .d6 a { text-decoration: none; color: inherit; }
 
 .d6-nav {
@@ -213,6 +213,8 @@ textarea.d6-form-control { resize: vertical; min-height: 100px; }
   .d6-hero { padding: 72px 14px 40px; }
   .d6-cta-section { padding: 40px 14px; }
 }
+.d6-wifi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; max-width: 1100px; margin: 0 auto; }
+@media (max-width: 768px) { .d6-wifi-grid { grid-template-columns: 1fr; gap: 32px; } }
 @keyframes d6-fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes d6-fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .d6-hero-text > * { animation: d6-fadeUp 0.65s ease both; }
@@ -227,7 +229,31 @@ textarea.d6-form-control { resize: vertical; min-height: 100px; }
 .d6-spec-body::-webkit-scrollbar { width: 5px; }
 .d6-spec-body::-webkit-scrollbar-track { background: transparent; }
 .d6-spec-body::-webkit-scrollbar-thumb { background: #FF6600; border-radius: 10px; }
+.d6-reveal { opacity: 0; transform: translateY(24px) scale(0.98); transition: opacity 0.65s cubic-bezier(0.34,1.56,0.64,1), transform 0.65s cubic-bezier(0.34,1.56,0.64,1); }
+.d6-reveal.visible { opacity: 1; transform: none; }
+.d6-grid-reveal > * { opacity: 0; transform: translateY(24px) scale(0.98); transition: opacity 0.65s cubic-bezier(0.34,1.56,0.64,1), transform 0.65s cubic-bezier(0.34,1.56,0.64,1); }
+.d6-grid-reveal.visible > *:nth-child(1) { opacity: 1; transform: none; }
+.d6-grid-reveal.visible > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 65ms; }
+.d6-grid-reveal.visible > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 130ms; }
+.d6-grid-reveal.visible > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 195ms; }
+.d6-grid-reveal.visible > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 260ms; }
+.d6-grid-reveal.visible > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 325ms; }
 `
+
+function useReveal(opts = {}) {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setVisible(true); obs.unobserve(el) }
+    }, { threshold: 0.08, ...opts })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return [ref, visible]
+}
 
 function D6Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -307,6 +333,9 @@ function D6Footer() {
 
 function D6HomePage() {
   const navigate = useNavigate()
+  const [headerRef, headerVisible] = useReveal()
+  const [gridRef, gridVisible] = useReveal()
+  const [revRef, revVisible] = useReveal()
   const heroUsps = [
     { emoji: '🏆', title: '15 jaar ervaring', sub: 'Specialist in airco' },
     { emoji: '💰', title: 'Laagste prijs', sub: 'Direct bij fabrikant' },
@@ -355,9 +384,11 @@ function D6HomePage() {
       </div>
 
       <section className="d6-section">
-        <div className="d6-section-eyebrow">Ons aanbod</div>
-        <div className="d6-section-title">Populaire producten</div>
-        <div className="d6-products-grid">
+        <div ref={headerRef} className={`d6-reveal${headerVisible ? ' visible' : ''}`}>
+          <div className="d6-section-eyebrow">Ons aanbod</div>
+          <div className="d6-section-title">Populaire producten</div>
+        </div>
+        <div ref={gridRef} className={`d6-products-grid d6-grid-reveal${gridVisible ? ' visible' : ''}`}>
           {PRODUCTS.slice(0, 6).map(p => (
             <div key={p.id} className="d6-product-card">
               <div className="d6-product-img-wrap">
@@ -389,7 +420,7 @@ function D6HomePage() {
         <div className="d6-reviews-inner">
           <div className="d6-section-eyebrow">Google reviews</div>
           <div className="d6-section-title">Tevreden klanten</div>
-          <div className="d6-reviews-grid">
+          <div ref={revRef} className={`d6-reviews-grid d6-grid-reveal${revVisible ? ' visible' : ''}`}>
             {REVIEWS.slice(0, 6).map((r, i) => (
               <div key={i} className="d6-review-card">
                 <div className="d6-review-stars">{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</div>
@@ -403,7 +434,7 @@ function D6HomePage() {
 
       {/* WiFi feature section */}
       <section style={{ background: '#fff7f3', padding: '80px 48px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 56, alignItems: 'center' }}>
+        <div className="d6-wifi-grid">
           <div>
             <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', color: '#FF6B2C', textTransform: 'uppercase', marginBottom: 12 }}>Standaard inbegrepen</div>
             <h2 style={{ fontFamily: 'Nunito,sans-serif', fontSize: 'clamp(24px,3.5vw,38px)', fontWeight: 800, color: '#1e2d45', lineHeight: 1.15, marginBottom: 16 }}>

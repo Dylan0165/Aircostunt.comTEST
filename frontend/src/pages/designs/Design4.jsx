@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
 import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE, OPENING_HOURS } from '../../data/staticData'
 import WhatsAppButton from '../../components/WhatsAppButton'
@@ -7,7 +7,7 @@ const BASE = '/design/4'
 
 const CSS = `
 .d4 *, .d4 *::before, .d4 *::after { box-sizing: border-box; margin: 0; padding: 0; }
-.d4 { font-family: 'Rajdhani', 'Arial', sans-serif; font-weight: 400; background: #060C18; color: #c8d8f0; line-height: 1.6; min-height: 100vh; }
+.d4 { font-family: 'Rajdhani', 'Arial', sans-serif; font-weight: 400; background: #060C18; color: #c8d8f0; line-height: 1.6; min-height: 100vh; overflow-x: hidden; }
 .d4 a { text-decoration: none; color: inherit; }
 
 .d4-nav {
@@ -209,6 +209,8 @@ textarea.d4-form-control { resize: vertical; min-height: 100px; }
   .d4-hero { padding: 64px 14px 40px; }
   .d4-cta-section { padding: 40px 14px; }
 }
+.d4-wifi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; max-width: 1100px; margin: 0 auto; }
+@media (max-width: 768px) { .d4-wifi-grid { grid-template-columns: 1fr; gap: 32px; } }
 @keyframes d4-fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes d4-fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes d4-slideRight { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
@@ -224,7 +226,31 @@ textarea.d4-form-control { resize: vertical; min-height: 100px; }
 .d4-spec-body::-webkit-scrollbar { width: 5px; }
 .d4-spec-body::-webkit-scrollbar-track { background: transparent; }
 .d4-spec-body::-webkit-scrollbar-thumb { background: #FF6600; border-radius: 10px; }
+.d4-reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.5s cubic-bezier(0.32,0.72,0,1), transform 0.5s cubic-bezier(0.32,0.72,0,1); }
+.d4-reveal.visible { opacity: 1; transform: none; }
+.d4-grid-reveal > * { opacity: 0; transform: translateY(18px); transition: opacity 0.5s cubic-bezier(0.32,0.72,0,1), transform 0.5s cubic-bezier(0.32,0.72,0,1); }
+.d4-grid-reveal.visible > *:nth-child(1) { opacity: 1; transform: none; }
+.d4-grid-reveal.visible > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 50ms; }
+.d4-grid-reveal.visible > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 100ms; }
+.d4-grid-reveal.visible > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 150ms; }
+.d4-grid-reveal.visible > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 200ms; }
+.d4-grid-reveal.visible > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 250ms; }
 `
+
+function useReveal(opts = {}) {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setVisible(true); obs.unobserve(el) }
+    }, { threshold: 0.08, ...opts })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return [ref, visible]
+}
 
 function D4Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -305,6 +331,9 @@ const tickerItems = ['Daikin', 'Mitsubishi Heavy', 'Mitsubishi Electric', 'Samsu
 
 function D4HomePage() {
   const navigate = useNavigate()
+  const [headerRef, headerVisible] = useReveal()
+  const [gridRef, gridVisible] = useReveal()
+  const [revRef, revVisible] = useReveal()
   return (
     <div>
       <section className="d4-hero">
@@ -341,12 +370,12 @@ function D4HomePage() {
       </div>
 
       <section className="d4-section">
-        <div className="d4-section-header">
+        <div ref={headerRef} className={`d4-section-header d4-reveal${headerVisible ? ' visible' : ''}`}>
           <div className="d4-section-eyebrow">// Assortiment</div>
           <div className="d4-section-title">Uitgelichte producten</div>
           <div className="d4-section-line" />
         </div>
-        <div className="d4-products-grid">
+        <div ref={gridRef} className={`d4-products-grid d4-grid-reveal${gridVisible ? ' visible' : ''}`}>
           {PRODUCTS.slice(0, 6).map(p => (
             <div key={p.id} className="d4-product-card">
               <div className={`d4-product-stock ${p.inStock ? 'd4-in-stock' : 'd4-out-stock'}`}>
@@ -392,7 +421,7 @@ function D4HomePage() {
           <div className="d4-section-title">Wat klanten zeggen</div>
           <div className="d4-section-line" />
         </div>
-        <div className="d4-reviews-grid">
+        <div ref={revRef} className={`d4-reviews-grid d4-grid-reveal${revVisible ? ' visible' : ''}`}>
           {REVIEWS.slice(0, 6).map((r, i) => (
             <div key={i} className="d4-review-card">
               <div className="d4-review-stars">{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</div>
@@ -405,7 +434,7 @@ function D4HomePage() {
 
       {/* WiFi feature section */}
       <section style={{ background: 'linear-gradient(135deg, #0e1c38, #0a1428)', borderTop: '1px solid rgba(0,200,255,0.1)', borderBottom: '1px solid rgba(0,200,255,0.1)', padding: '80px 40px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+        <div className="d4-wifi-grid">
           <div>
             <div style={{ fontSize: 11, color: '#00C8FF', letterSpacing: '0.2em', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ display: 'block', width: 24, height: 1, background: '#00C8FF' }} />

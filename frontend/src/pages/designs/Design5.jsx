@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
 import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE, OPENING_HOURS } from '../../data/staticData'
 import WhatsAppButton from '../../components/WhatsAppButton'
@@ -7,7 +7,7 @@ const BASE = '/design/5'
 
 const CSS = `
 .d5 *, .d5 *::before, .d5 *::after { box-sizing: border-box; margin: 0; padding: 0; }
-.d5 { font-family: 'Poppins', 'Segoe UI', sans-serif; font-weight: 400; background: #fff; color: #0a1628; line-height: 1.6; min-height: 100vh; }
+.d5 { font-family: 'Poppins', 'Segoe UI', sans-serif; font-weight: 400; background: #fff; color: #0a1628; line-height: 1.6; min-height: 100vh; overflow-x: hidden; }
 .d5 a { text-decoration: none; color: inherit; }
 
 .d5-nav {
@@ -57,8 +57,8 @@ const CSS = `
 .d5-hero-stat-label { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 6px; }
 
 .d5-usps-strip { background: #f8faff; border-bottom: 1px solid rgba(0,51,102,0.08); }
-.d5-usps-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; display: flex; }
-.d5-usp-item { flex: 1; padding: 28px 24px; display: flex; align-items: center; gap: 14px; border-right: 1px solid rgba(0,51,102,0.08); }
+.d5-usps-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; display: flex; flex-wrap: wrap; }
+.d5-usp-item { flex: 1; min-width: 0; padding: 28px 24px; display: flex; align-items: center; gap: 14px; border-right: 1px solid rgba(0,51,102,0.08); }
 .d5-usp-item:last-child { border-right: none; }
 .d5-usp-icon { width: 42px; height: 42px; background: rgba(255,102,0,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .d5-usp-icon svg { width: 20px; height: 20px; color: #FF6600; }
@@ -229,7 +229,9 @@ textarea.d5-form-control { resize: vertical; min-height: 100px; }
   .d5-acc-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
   .d5-brands-pg-grid { grid-template-columns: 1fr; }
   .d5-stats-grid { grid-template-columns: 1fr 1fr; }
-  .d5-usps-inner { padding: 0 16px; }
+  .d5-usps-inner { padding: 0; flex-direction: column; }
+  .d5-usp-item { border-right: none; border-bottom: 1px solid rgba(0,51,102,0.06); padding: 16px 20px; flex: none; width: 100%; }
+  .d5-usp-item:last-child { border-bottom: none; }
 }
 @media (max-width: 480px) {
   .d5-products-grid { grid-template-columns: 1fr; }
@@ -239,6 +241,8 @@ textarea.d5-form-control { resize: vertical; min-height: 100px; }
   .d5-hero { padding: 64px 14px 40px; }
   .d5-cta-section { padding: 40px 14px; }
 }
+.d5-wifi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; max-width: 1100px; margin: 0 auto; }
+@media (max-width: 768px) { .d5-wifi-grid { grid-template-columns: 1fr; gap: 32px; } }
 @keyframes d5-fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes d5-fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .d5-hero-tag { animation: d5-fadeUp 0.5s ease both; }
@@ -253,7 +257,31 @@ textarea.d5-form-control { resize: vertical; min-height: 100px; }
 .d5-spec-body::-webkit-scrollbar { width: 5px; }
 .d5-spec-body::-webkit-scrollbar-track { background: transparent; }
 .d5-spec-body::-webkit-scrollbar-thumb { background: #FF6600; border-radius: 10px; }
+.d5-reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.65s cubic-bezier(0.32,0.72,0,1), transform 0.65s cubic-bezier(0.32,0.72,0,1); }
+.d5-reveal.visible { opacity: 1; transform: none; }
+.d5-grid-reveal > * { opacity: 0; transform: translateY(22px); transition: opacity 0.65s cubic-bezier(0.32,0.72,0,1), transform 0.65s cubic-bezier(0.32,0.72,0,1); }
+.d5-grid-reveal.visible > *:nth-child(1) { opacity: 1; transform: none; }
+.d5-grid-reveal.visible > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 60ms; }
+.d5-grid-reveal.visible > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 120ms; }
+.d5-grid-reveal.visible > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 180ms; }
+.d5-grid-reveal.visible > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 240ms; }
+.d5-grid-reveal.visible > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 300ms; }
 `
+
+function useReveal(opts = {}) {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setVisible(true); obs.unobserve(el) }
+    }, { threshold: 0.08, ...opts })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return [ref, visible]
+}
 
 function D5Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -343,6 +371,9 @@ const USPS = [
 
 function D5HomePage() {
   const navigate = useNavigate()
+  const [headerRef, headerVisible] = useReveal()
+  const [gridRef, gridVisible] = useReveal()
+  const [revRef, revVisible] = useReveal()
   return (
     <div>
       {/* Hero */}
@@ -400,12 +431,12 @@ function D5HomePage() {
 
       {/* Products */}
       <section className="d5-section">
-        <div className="d5-section-header">
+        <div ref={headerRef} className={`d5-section-header d5-reveal${headerVisible ? ' visible' : ''}`}>
           <div className="d5-section-eyebrow">Ons assortiment</div>
           <div className="d5-section-title">Populaire producten</div>
           <div className="d5-section-sub">Direct uit voorraad leverbaar</div>
         </div>
-        <div className="d5-products-grid">
+        <div ref={gridRef} className={`d5-products-grid d5-grid-reveal${gridVisible ? ' visible' : ''}`}>
           {PRODUCTS.slice(0, 6).map(p => (
             <div key={p.id} className="d5-product-card">
               <div className="d5-product-card-img-wrap">
@@ -455,7 +486,7 @@ function D5HomePage() {
             <div className="d5-reviews-eyebrow">Google reviews</div>
             <div className="d5-reviews-title">Wat onze klanten zeggen</div>
           </div>
-          <div className="d5-reviews-grid">
+          <div ref={revRef} className={`d5-reviews-grid d5-grid-reveal${revVisible ? ' visible' : ''}`}>
             {REVIEWS.slice(0, 6).map((r, i) => (
               <div key={i} className="d5-review-card">
                 <div className="d5-review-stars">{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</div>
@@ -469,7 +500,7 @@ function D5HomePage() {
 
       {/* WiFi feature section */}
       <section style={{ background: '#f0f4f8', padding: '80px 48px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+        <div className="d5-wifi-grid">
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <div style={{ background: '#fff', borderRadius: 24, padding: 40, boxShadow: '0 8px 40px rgba(0,51,102,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src="/wifi.png" alt="WiFi module" style={{ maxWidth: 200, maxHeight: 200, objectFit: 'contain' }} />

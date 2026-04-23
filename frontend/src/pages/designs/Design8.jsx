@@ -39,6 +39,7 @@ const CSS = `
   color: #0d1117;
   line-height: 1.6;
   min-height: 100vh;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 .d8 a { text-decoration: none; }

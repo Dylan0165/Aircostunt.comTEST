@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
 import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE, BRAND_LOGOS } from '../../data/staticData'
 import WhatsAppButton from '../../components/WhatsAppButton'
@@ -15,6 +15,7 @@ const CSS = `
   background: #FAFAFA;
   color: #1a1a2e;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 @keyframes d2-fadeUp {
@@ -674,7 +675,31 @@ const CSS = `
   .d2-section { padding: 48px 24px; }
   .d2-wifi-text { padding: 36px 28px; }
 }
+.d2-reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s cubic-bezier(0.32,0.72,0,1), transform 0.6s cubic-bezier(0.32,0.72,0,1); }
+.d2-reveal.visible { opacity: 1; transform: none; }
+.d2-grid-reveal > * { opacity: 0; transform: translateY(20px); transition: opacity 0.6s cubic-bezier(0.32,0.72,0,1), transform 0.6s cubic-bezier(0.32,0.72,0,1); }
+.d2-grid-reveal.visible > *:nth-child(1) { opacity: 1; transform: none; }
+.d2-grid-reveal.visible > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 60ms; }
+.d2-grid-reveal.visible > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 120ms; }
+.d2-grid-reveal.visible > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 180ms; }
+.d2-grid-reveal.visible > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 240ms; }
+.d2-grid-reveal.visible > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 300ms; }
 `
+
+function useReveal(opts = {}) {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setVisible(true); obs.unobserve(el) }
+    }, { threshold: 0.08, ...opts })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return [ref, visible]
+}
 
 const SPEC_LABELS = {
   koelcapaciteit: 'Koelcapaciteit',
@@ -1001,6 +1026,9 @@ function CartIcon({ size = 16 }) {
 // ══════════════════════════════════════════════════════════
 function D2HomePage({ onAddToCart, navigate }) {
   const featured = PRODUCTS.slice(0, 6)
+  const [headerRef, headerVisible] = useReveal()
+  const [gridRef, gridVisible] = useReveal()
+  const [reviewRef, reviewVisible] = useReveal()
 
   return (
     <>
@@ -1053,12 +1081,12 @@ function D2HomePage({ onAddToCart, navigate }) {
       {/* FEATURED PRODUCTS */}
       <section className="d2-section" style={{ paddingTop: 16 }}>
         <div className="d2-section-inner">
-          <div className="d2-section-header">
+          <div ref={headerRef} className={`d2-section-header d2-reveal${headerVisible ? ' visible' : ''}`}>
             <span className="d2-section-label">Bestsellers</span>
             <h2>Meest verkochte airco's</h2>
             <p>Direct beschikbaar in onze showroom in Dordrecht. Bestel online en haal vandaag nog op.</p>
           </div>
-          <div className="d2-product-grid">
+          <div ref={gridRef} className={`d2-product-grid d2-grid-reveal${gridVisible ? ' visible' : ''}`}>
             {featured.map(product => (
               <HomeProductCard key={product.id} product={product} onAddToCart={onAddToCart} />
             ))}

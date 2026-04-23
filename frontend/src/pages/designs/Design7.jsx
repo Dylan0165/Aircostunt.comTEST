@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
 import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE, OPENING_HOURS } from '../../data/staticData'
 import WhatsAppButton from '../../components/WhatsAppButton'
@@ -7,7 +7,7 @@ const BASE = '/design/7'
 
 const CSS = `
 .d7 *, .d7 *::before, .d7 *::after { box-sizing: border-box; margin: 0; padding: 0; }
-.d7 { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; font-weight: 400; background: #fff; color: #0a1628; line-height: 1.6; min-height: 100vh; }
+.d7 { font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif; font-weight: 400; background: #fff; color: #0a1628; line-height: 1.6; min-height: 100vh; overflow-x: hidden; }
 .d7 a { text-decoration: none; color: inherit; }
 
 .d7-nav {
@@ -237,6 +237,8 @@ textarea.d7-form-control { resize: vertical; min-height: 100px; }
   .d7-hero { padding: 72px 14px 48px; }
   .d7-cta-strip { padding: 36px 14px; }
 }
+.d7-wifi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; max-width: 1100px; margin: 0 auto; }
+@media (max-width: 768px) { .d7-wifi-grid { grid-template-columns: 1fr; gap: 32px; } }
 @keyframes d7-fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes d7-fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .d7-hero-eyebrow { animation: d7-fadeUp 0.5s ease both; }
@@ -251,7 +253,31 @@ textarea.d7-form-control { resize: vertical; min-height: 100px; }
 .d7-spec-body::-webkit-scrollbar { width: 5px; }
 .d7-spec-body::-webkit-scrollbar-track { background: transparent; }
 .d7-spec-body::-webkit-scrollbar-thumb { background: #FF6600; border-radius: 10px; }
+.d7-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.32,0.72,0,1), transform 0.7s cubic-bezier(0.32,0.72,0,1); }
+.d7-reveal.visible { opacity: 1; transform: none; }
+.d7-grid-reveal > * { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.32,0.72,0,1), transform 0.7s cubic-bezier(0.32,0.72,0,1); }
+.d7-grid-reveal.visible > *:nth-child(1) { opacity: 1; transform: none; }
+.d7-grid-reveal.visible > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 65ms; }
+.d7-grid-reveal.visible > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 130ms; }
+.d7-grid-reveal.visible > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 195ms; }
+.d7-grid-reveal.visible > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 260ms; }
+.d7-grid-reveal.visible > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 325ms; }
 `
+
+function useReveal(opts = {}) {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setVisible(true); obs.unobserve(el) }
+    }, { threshold: 0.08, ...opts })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return [ref, visible]
+}
 
 function D7Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -339,6 +365,9 @@ const trustItems = [
 
 function D7HomePage() {
   const navigate = useNavigate()
+  const [statsRef, statsVisible] = useReveal()
+  const [gridRef, gridVisible] = useReveal()
+  const [revRef, revVisible] = useReveal()
   return (
     <div>
       {/* Dark Hero */}
@@ -374,7 +403,7 @@ function D7HomePage() {
       {/* White stats */}
       <div className="d7-white-section">
         <div className="d7-section">
-          <div className="d7-stats-row">
+          <div ref={statsRef} className={`d7-stats-row d7-grid-reveal${statsVisible ? ' visible' : ''}`}>
             {[
               { val: '15+', label: 'Jaar ervaring' },
               { val: '5', label: 'A-merken' },
@@ -390,7 +419,7 @@ function D7HomePage() {
 
           <div className="d7-section-eyebrow">Ons assortiment</div>
           <div className="d7-section-title">Populaire producten</div>
-          <div className="d7-products-grid">
+          <div ref={gridRef} className={`d7-products-grid d7-grid-reveal${gridVisible ? ' visible' : ''}`}>
             {PRODUCTS.slice(0, 6).map(p => (
               <div key={p.id} className="d7-product-card">
                 <div className="d7-product-img-wrap">
@@ -440,7 +469,7 @@ function D7HomePage() {
         <div className="d7-section">
           <div className="d7-section-eyebrow">Google reviews</div>
           <div className="d7-section-title d7-section-title-light">Wat klanten zeggen</div>
-          <div className="d7-reviews-grid">
+          <div ref={revRef} className={`d7-reviews-grid d7-grid-reveal${revVisible ? ' visible' : ''}`}>
             {REVIEWS.slice(0, 6).map((r, i) => (
               <div key={i} className="d7-review-card">
                 <div className="d7-review-stars">{'★'.repeat(r.stars)}{'☆'.repeat(5 - r.stars)}</div>
@@ -454,7 +483,7 @@ function D7HomePage() {
 
       {/* WiFi feature section */}
       <section style={{ background: '#f8fafc', padding: '80px 48px' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+        <div className="d7-wifi-grid">
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <div style={{ background: '#fff', borderRadius: 24, padding: 40, boxShadow: '0 8px 40px rgba(0,51,102,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src="/wifi.png" alt="WiFi module" style={{ maxWidth: 200, maxHeight: 200, objectFit: 'contain' }} />

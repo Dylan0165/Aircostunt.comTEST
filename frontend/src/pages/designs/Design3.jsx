@@ -1,5 +1,5 @@
 import { Routes, Route, Link, NavLink, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { PRODUCTS, BRANDS, ACCESSORIES, REVIEWS, FAQ, SITE, BRAND_LOGOS } from '../../data/staticData'
 import WhatsAppButton from '../../components/WhatsAppButton'
 
@@ -9,7 +9,7 @@ const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 .d3 *, .d3 *::before, .d3 *::after { box-sizing: border-box; margin: 0; padding: 0; }
-.d3 { font-family: 'Outfit', sans-serif; background: #111827; color: #F9FAFB; min-height: 100vh; }
+.d3 { font-family: 'Outfit', sans-serif; background: #111827; color: #F9FAFB; min-height: 100vh; overflow-x: hidden; }
 .d3 a { text-decoration: none; color: inherit; }
 .d3 button { font-family: 'Outfit', sans-serif; }
 
@@ -629,7 +629,37 @@ const CSS = `
   .d3-modal-overlay { padding: 0; align-items: flex-end; }
   .d3-modal { border-radius: 20px 20px 0 0; max-height: 92vh; }
 }
+@keyframes d3-scanLine { from { transform: translateX(-110%); } to { transform: translateX(110%); } }
+.d3-feature-card { position: relative; overflow: hidden; }
+.d3-feature-card::after { content: ''; position: absolute; top: 0; left: 0; width: 60%; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,102,0,0.6), transparent); animation: d3-scanLine 3s ease-in-out infinite; }
+.d3-feature-card:nth-child(2)::after { animation-delay: 0.75s; }
+.d3-feature-card:nth-child(3)::after { animation-delay: 1.5s; }
+.d3-feature-card:nth-child(4)::after { animation-delay: 2.25s; }
+.d3-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.32,0.72,0,1), transform 0.7s cubic-bezier(0.32,0.72,0,1); }
+.d3-reveal.visible { opacity: 1; transform: none; }
+.d3-grid-reveal > * { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.32,0.72,0,1), transform 0.7s cubic-bezier(0.32,0.72,0,1); }
+.d3-grid-reveal.visible > *:nth-child(1) { opacity: 1; transform: none; }
+.d3-grid-reveal.visible > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 70ms; }
+.d3-grid-reveal.visible > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 140ms; }
+.d3-grid-reveal.visible > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 210ms; }
+.d3-grid-reveal.visible > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 280ms; }
+.d3-grid-reveal.visible > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 350ms; }
 `
+
+function useReveal(opts = {}) {
+  const ref = useRef(null)
+  const [visible, setVisible] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setVisible(true); obs.unobserve(el) }
+    }, { threshold: 0.08, ...opts })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return [ref, visible]
+}
 
 const SPEC_LABELS = {
   koelcapaciteit: 'Koelcapaciteit',
@@ -1001,6 +1031,9 @@ function FaqList() {
 // ─── HOME PAGE ─────────────────────────────────────────────────────────────────
 function HomePage({ addToCart, onSpec }) {
   const featured = PRODUCTS.slice(0, 4)
+  const [featRef, featVisible] = useReveal()
+  const [gridRef, gridVisible] = useReveal()
+  const [revRef, revVisible] = useReveal()
 
   return (
     <div className="d3-main">
@@ -1062,7 +1095,7 @@ function HomePage({ addToCart, onSpec }) {
       </div>
 
       {/* FEATURE CARDS */}
-      <div className="d3-features-grid">
+      <div ref={featRef} className={`d3-features-grid d3-grid-reveal${featVisible ? ' visible' : ''}`}>
         <div className="d3-feature-card">
           <div className="d3-feature-icon">
             <img
@@ -1118,7 +1151,7 @@ function HomePage({ addToCart, onSpec }) {
           <h2 className="d3-section-title">Bestsellers</h2>
           <p className="d3-section-sub">De meest verkochte split-units, altijd op voorraad in onze showroom.</p>
         </div>
-        <div className="d3-products-grid-home">
+        <div ref={gridRef} className={`d3-products-grid-home d3-grid-reveal${gridVisible ? ' visible' : ''}`}>
           {featured.map(p => (
             <ProductCard key={p.id} product={p} onAdd={addToCart} onSpec={onSpec} />
           ))}
@@ -1153,7 +1186,7 @@ function HomePage({ addToCart, onSpec }) {
               </div>
             </div>
           </div>
-          <div className="d3-reviews-grid">
+          <div ref={revRef} className={`d3-reviews-grid d3-grid-reveal${revVisible ? ' visible' : ''}`}>
             {REVIEWS.slice(0, 3).map((r, i) => (
               <div key={i} className="d3-review-card">
                 <Stars n={r.stars} />
