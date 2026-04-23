@@ -41,7 +41,7 @@ const CSS = `
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
-.d8 a { text-decoration: none; color: inherit; }
+.d8 a { text-decoration: none; }
 .d8-display { font-family: 'Syne', sans-serif; font-weight: 800; }
 
 /* ── FLOATING PILL NAV ── */
@@ -67,16 +67,16 @@ const CSS = `
 .d8-nav-logo img { height: 28px; width: auto; }
 .d8-nav-links { display: flex; gap: 2px; }
 .d8-nav-links a {
-  font-size: 13px; font-weight: 600; color: #555;
+  font-size: 13px; font-weight: 600; color: #555 !important;
   padding: 6px 14px; border-radius: 100px;
   transition: background 0.25s cubic-bezier(0.32,0.72,0,1), color 0.25s cubic-bezier(0.32,0.72,0,1);
   white-space: nowrap;
 }
-.d8-nav-links a:hover { background: #f5f5f0; color: #111; }
-.d8-nav-links a.active { background: #f0ede8; color: #111; }
+.d8-nav-links a:hover { background: #f5f5f0; color: #111 !important; }
+.d8-nav-links a.active { background: #f0ede8; color: #111 !important; }
 .d8-nav-cta {
   display: inline-flex; align-items: center; gap: 8px;
-  background: #0d1117; color: #fff;
+  background: #0d1117; color: #fff !important;
   padding: 8px 18px; border-radius: 100px;
   font-size: 13px; font-weight: 700;
   transition: transform 0.3s cubic-bezier(0.32,0.72,0,1), background 0.25s;
@@ -108,7 +108,7 @@ const CSS = `
 }
 .d8-mobile-overlay.open { display: flex; }
 .d8-mobile-overlay a {
-  font-size: 28px; font-weight: 700; color: #111;
+  font-size: 28px; font-weight: 700; color: #111 !important;
   font-family: 'Syne', sans-serif;
   padding: 10px 24px; border-radius: 16px;
   opacity: 0; transform: translateY(16px);
@@ -257,7 +257,7 @@ const CSS = `
 .d8-trust-item span { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.65); }
 
 /* ── PRODUCT CARDS (double-bezel) ── */
-.d8-products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-bottom: 48px; }
+.d8-products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 48px; }
 .d8-product-shell {
   background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.06);
   border-radius: 24px; padding: 5px;
@@ -316,7 +316,7 @@ const CSS = `
 .d8-cta p { font-size: 15px; color: rgba(255,255,255,0.45); margin-top: 10px; }
 .d8-btn-orange {
   display: inline-flex; align-items: center; gap: 0;
-  background: #FF5500; color: #fff;
+  background: #FF5500; color: #fff !important;
   border-radius: 100px; padding: 14px 14px 14px 24px;
   font-size: 14px; font-weight: 700; cursor: pointer; border: none;
   transition: transform 0.35s cubic-bezier(0.32,0.72,0,1), background 0.25s;
@@ -384,7 +384,7 @@ const CSS = `
 .d8-contact-icon-wrap { width: 40px; height: 40px; background: rgba(255,85,0,0.08); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .d8-contact-icon-wrap svg { width: 18px; height: 18px; color: #FF5500; }
 .d8-contact-label { font-size: 10px; font-weight: 700; color: #ccc; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2px; }
-.d8-contact-val { font-size: 14px; font-weight: 600; color: #0d1117; }
+.d8-contact-val { font-size: 14px; font-weight: 600; color: #0d1117 !important; }
 .d8-form-shell { background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.06); border-radius: 24px; padding: 5px; }
 .d8-form-core { background: #fff; border-radius: 20px; padding: 32px; box-shadow: inset 0 1px 1px rgba(255,255,255,0.9); }
 .d8-form-group { margin-bottom: 16px; }
@@ -415,8 +415,8 @@ textarea.d8-form-control { resize: vertical; min-height: 100px; }
 .d8-footer-logo { height: 26px; width: auto; }
 .d8-footer-tagline { font-size: 13px; color: rgba(255,255,255,0.25); line-height: 1.75; max-width: 220px; }
 .d8-footer-col-title { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.18); margin-bottom: 18px; }
-.d8-footer-nav a, .d8-footer-nav span { display: block; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.32); margin-bottom: 10px; transition: color 0.2s; }
-.d8-footer-nav a:hover { color: rgba(255,255,255,0.75); }
+.d8-footer-nav a, .d8-footer-nav span { display: block; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.32) !important; margin-bottom: 10px; transition: color 0.2s; }
+.d8-footer-nav a:hover { color: rgba(255,255,255,0.75) !important; }
 .d8-footer-bottom { border-top: 1px solid rgba(255,255,255,0.05); padding-top: 24px; display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.18); flex-wrap: wrap; gap: 8px; }
 
 /* ── REVEAL ANIMATIONS ── */
@@ -428,8 +428,8 @@ textarea.d8-form-control { resize: vertical; min-height: 100px; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 1024px) {
-  .d8-hero { grid-template-columns: 1fr; min-height: auto; padding: 100px 40px 64px; gap: 48px; }
-  .d8-section { padding: 72px 40px; }
+  .d8-hero { grid-template-columns: 1fr; min-height: auto; padding: 100px 32px 64px; gap: 48px; }
+  .d8-section { padding: 72px 32px; }
   .d8-about-grid, .d8-contact-grid, .d8-wifi-inner { grid-template-columns: 1fr; gap: 48px; }
   .d8-cta-inner { padding: 72px 40px; }
   .d8-page-hero { padding: 110px 40px 60px; }
@@ -1138,17 +1138,16 @@ export default function Design8() {
       <Link
         to="/"
         style={{
-          position: 'fixed', bottom: 80, right: 24, zIndex: 9999,
+          position: 'fixed', bottom: 24, left: 24, zIndex: 9999,
           display: 'inline-flex', alignItems: 'center', gap: 8,
           background: '#0d1117', color: '#fff',
           padding: '10px 20px', borderRadius: 100, textDecoration: 'none',
           fontSize: 13, fontWeight: 700,
           boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
           border: '1px solid rgba(255,255,255,0.06)',
-          transition: 'background 0.25s',
         }}
       >
-        Alle ontwerpen
+        ← Alle ontwerpen
       </Link>
     </>
   )
