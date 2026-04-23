@@ -358,7 +358,7 @@ function D6HomePage() {
         <div className="d6-section-eyebrow">Ons aanbod</div>
         <div className="d6-section-title">Populaire producten</div>
         <div className="d6-products-grid">
-          {PRODUCTS.slice(0, 4).map(p => (
+          {PRODUCTS.slice(0, 6).map(p => (
             <div key={p.id} className="d6-product-card">
               <div className="d6-product-img-wrap">
                 {p.image

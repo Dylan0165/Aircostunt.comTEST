@@ -72,6 +72,20 @@ const designs = [
     },
     pages: ['Home', 'Merken', 'Producten', 'Over ons', 'Contact'],
   },
+  {
+    id: 8,
+    name: 'Premium Soft Structuralism',
+    tag: 'Awwwards-tier',
+    desc: 'Floating pill-nav, Syne display-font, asymmetrisch bento hero, double-bezel kaarten, spring-physics motion en staggered reveal.',
+    font: 'Syne',
+    preview: {
+      header: '#FAFAF8', headerAccent: '#FF5500',
+      hero: 'linear-gradient(160deg, #FAFAF8 0%, #F5F3EF 100%)',
+      heroText: '#0d1117', card: '#ffffff', cardBorder: 'rgba(0,0,0,0.06)',
+      accent: '#FF5500',
+    },
+    pages: ['Home', 'Merken', 'Producten', 'Over ons', 'Contact'],
+  },
 ]
 
 const pageColors = {

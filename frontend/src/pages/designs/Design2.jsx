@@ -1000,7 +1000,7 @@ function CartIcon({ size = 16 }) {
 // PAGE: HOME
 // ══════════════════════════════════════════════════════════
 function D2HomePage({ onAddToCart, navigate }) {
-  const featured = PRODUCTS.slice(0, 4)
+  const featured = PRODUCTS.slice(0, 6)
 
   return (
     <>

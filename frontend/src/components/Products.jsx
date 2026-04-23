@@ -37,7 +37,7 @@ function ProductModal({ product, onClose }) {
                 {BRANDS.find((b) => b.id === product.brandId)?.name || ''}
               </span>
             )}
-            <h2 className="text-lg font-bold text-primary leading-snug truncate">{product.name}</h2>
+            <h2 className="text-lg font-bold text-primary leading-snug line-clamp-2">{product.name}</h2>
             <div className="flex items-baseline gap-2 mt-0.5">
               {priceLabel && <span className="text-accent font-bold text-xl">{priceLabel}</span>}
               <span className="text-xs text-gray-400">incl. BTW</span>
@@ -157,7 +157,11 @@ function ProductCard({ product, brands, onInfoClick }) {
   return (
     <div
       ref={ref}
-      className={`animate-on-scroll ${isVisible ? 'is-visible' : ''} frost-card group bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1.5 border border-gray-100 flex flex-col`}
+      onClick={() => onInfoClick(product)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={e => e.key === 'Enter' && onInfoClick(product)}
+      className={`animate-on-scroll ${isVisible ? 'is-visible' : ''} frost-card group bg-white rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1.5 border border-gray-100 flex flex-col cursor-pointer`}
     >
       {/* Image */}
       <div className="relative h-48 bg-gray-50 overflow-hidden flex items-center justify-center">
@@ -301,8 +305,8 @@ export default function Products({ products, brands }) {
           </div>
         )}
 
-        {/* Product grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 stagger-children">
+        {/* Product grid — max 3 cols om wezenloos orphan te vermijden */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 stagger-children">
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} brands={brands} onInfoClick={setSelectedProduct} />
           ))}

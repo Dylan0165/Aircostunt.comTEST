@@ -391,7 +391,7 @@ function D7HomePage() {
           <div className="d7-section-eyebrow">Ons assortiment</div>
           <div className="d7-section-title">Populaire producten</div>
           <div className="d7-products-grid">
-            {PRODUCTS.slice(0, 4).map(p => (
+            {PRODUCTS.slice(0, 6).map(p => (
               <div key={p.id} className="d7-product-card">
                 <div className="d7-product-img-wrap">
                   {p.image

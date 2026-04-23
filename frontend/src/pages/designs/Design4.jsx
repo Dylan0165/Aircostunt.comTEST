@@ -347,7 +347,7 @@ function D4HomePage() {
           <div className="d4-section-line" />
         </div>
         <div className="d4-products-grid">
-          {PRODUCTS.slice(0, 4).map(p => (
+          {PRODUCTS.slice(0, 6).map(p => (
             <div key={p.id} className="d4-product-card">
               <div className={`d4-product-stock ${p.inStock ? 'd4-in-stock' : 'd4-out-stock'}`}>
                 {p.inStock ? 'Op voorraad' : 'Tijdelijk uit'}

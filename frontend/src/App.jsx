@@ -9,6 +9,7 @@ import Design4 from './pages/designs/Design4'
 import Design5 from './pages/designs/Design5'
 import Design6 from './pages/designs/Design6'
 import Design7 from './pages/designs/Design7'
+import Design8 from './pages/designs/Design8'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/design/5/*" element={<Design5 />} />
         <Route path="/design/6/*" element={<Design6 />} />
         <Route path="/design/7/*" element={<Design7 />} />
+        <Route path="/design/8/*" element={<Design8 />} />
       </Routes>
     </BrowserRouter>
   )

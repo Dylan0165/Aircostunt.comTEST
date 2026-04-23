@@ -406,7 +406,7 @@ function D5HomePage() {
           <div className="d5-section-sub">Direct uit voorraad leverbaar</div>
         </div>
         <div className="d5-products-grid">
-          {PRODUCTS.slice(0, 4).map(p => (
+          {PRODUCTS.slice(0, 6).map(p => (
             <div key={p.id} className="d5-product-card">
               <div className="d5-product-card-img-wrap">
                 {p.image

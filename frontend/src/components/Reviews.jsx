@@ -69,12 +69,15 @@ function Stars({ count }) {
   )
 }
 
-function ReviewCard({ review }) {
-  const [ref, isVisible] = useIntersectionObserver()
+function ReviewCard({ review, animDelay = 0, sectionVisible }) {
   return (
     <div
-      ref={ref}
-      className={`animate-on-scroll ${isVisible ? 'is-visible' : ''} bg-white rounded-2xl p-5 shadow-card border border-gray-100 flex flex-col`}
+      style={{
+        opacity: sectionVisible ? 1 : 0,
+        transform: sectionVisible ? 'translateY(0)' : 'translateY(22px)',
+        transition: `opacity 0.65s cubic-bezier(0.4,0,0.2,1) ${animDelay}ms, transform 0.65s cubic-bezier(0.4,0,0.2,1) ${animDelay}ms`,
+      }}
+      className="bg-white rounded-2xl p-5 shadow-card border border-gray-100 flex flex-col"
     >
       {/* Top row: stars + Google */}
       <div className="flex items-center justify-between mb-3">
@@ -106,7 +109,7 @@ function ReviewCard({ review }) {
 }
 
 export default function Reviews() {
-  const [sectionRef, sectionVisible] = useIntersectionObserver()
+  const [sectionRef, sectionVisible] = useIntersectionObserver({ threshold: 0.05, rootMargin: '0px' })
 
   return (
     <section id="reviews" className="py-20 bg-gray-50">
@@ -147,9 +150,9 @@ export default function Reviews() {
         </div>
 
         {/* Review cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 stagger-children">
-          {REVIEWS.map((review) => (
-            <ReviewCard key={review.name} review={review} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {REVIEWS.map((review, i) => (
+            <ReviewCard key={review.name} review={review} animDelay={i * 55} sectionVisible={sectionVisible} />
           ))}
         </div>
       </div>
